@@ -4,8 +4,6 @@
 ## Description 
 Example text that represents the overview, the expected behaviors, and purpose.
 
-## Migrations
+## All Tests Pass
 - [ ] Yes
 - [x] No
-
-<p style="text-align: center;"><center>🥔</center></p>
