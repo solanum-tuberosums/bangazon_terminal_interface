@@ -109,4 +109,33 @@ class TestDatabaseInteractions(unittest.TestCase):
         customer.delete_from_db()
         order.delete_from_db()
 
+
+    def test_set_active_customer(self): 
+        customer_one = Customer()
+        customer_two = Customer()
+        customer_three = Customer()
+        customer_one.id = customer.save()
+        customer_two.id = customer.save()
+        customer_three.id = customer.save()
+        customer_list = Customer.get_all()
+
+        active_customer = customer_list[1][0]
+
+        self.assertEqual(active_customer, customer_two.id)
+
+        customer_one.delete_from_db()
+        customer_two.delete_from_db()
+        customer_three.delete_from_db()
+
+
+
+
+
+
+
+
+    def test_complete_order(self):
+
+    def test_product_popularity(self):
+
         
