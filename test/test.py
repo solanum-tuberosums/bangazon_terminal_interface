@@ -3,6 +3,7 @@ import sys; sys.path.append('../')
 import faker
 from src.Customer import *
 from src.PaymentType import *
+from src.ActiveCustomer import *
 
 
 class TestDatabaseInteractions(unittest.TestCase):
@@ -34,7 +35,7 @@ class TestDatabaseInteractions(unittest.TestCase):
         self.assertIn(customer.date_created, customer_from_db)
 
         # Removes customer data from db
-        customer.delete_from_db()
+        Customer.delete_from_db()
 
 
     def test_save_payment_type(self):
@@ -63,8 +64,8 @@ class TestDatabaseInteractions(unittest.TestCase):
     	self.assertIn(payment_type.customer_id, payment_type_from_db)
 
         # Removes customer and payment_type data from db
-    	customer.delete_from_db()
-    	payment_type.delete_from_db()
+    	Customer.delete_from_db()
+    	PaymentType.delete_from_db()
 
     def test_create_order(self):
         customer.id = customer.save()
@@ -75,8 +76,8 @@ class TestDatabaseInteractions(unittest.TestCase):
         self.assertIn(order.date, order_from_db)
         self.assertIn(order.payment_type_id, order_from_db)
 
-        customer.delete_from_db()
-        order.delete_from_db()
+        Customer.delete_from_db()
+        Order.delete_from_db()
 
     def get_all_products(self):
         customer.id = customer.save()
@@ -106,36 +107,82 @@ class TestDatabaseInteractions(unittest.TestCase):
         self.assertIn(product.id, product_order_from_db[0])
         self.assertIn(order.id, product_order_from_db[0])
 
-        customer.delete_from_db()
-        order.delete_from_db()
+        Customer.delete_from_db()
+        Order.delete_from_db()
 
 
     def test_set_active_customer(self): 
         customer_one = Customer()
         customer_two = Customer()
         customer_three = Customer()
-        customer_one.id = customer.save()
-        customer_two.id = customer.save()
-        customer_three.id = customer.save()
+        customer_one.id = customer_one.save()
+        customer_two.id = customer_two.save()
+        customer_three.id = customer_three.save()
         customer_list = Customer.get_all()
 
-        active_customer = customer_list[1][0]
+        chosen_customer_id = customer_list[1][0]
 
-        self.assertEqual(active_customer, customer_two.id)
+        active_customer = ActiveCustomer(chosen_customer_id)
+        
+        self.assertEqual(active_customer.id, customer_two.id)
 
-        customer_one.delete_from_db()
-        customer_two.delete_from_db()
-        customer_three.delete_from_db()
-
-
-
-
-
-
-
+        Customer.delete_from_db()
+        
 
     def test_complete_order(self):
+        customer.id = customer.save()
+        payment_type = PaymentType(customer.id)
+        payment_type.id = payment_type.save()
+
+        order = Order(customer.id)
+        order.id = order.save()
+        product_type_id = 1
+        product = Product(customer.id, product_type_id)
+        product.id = product.save()
+        order.add_product_to_order(product.id)
+        product_order_from_db = order.get_line_items(order.id) 
+        
+        total_price = order.get_order_total()
+
+        order.payment_type_id = order.complete_order(payment_type.id) 
+
+        self.assertEqual(total_price, product.price)
+        self.assertEqual(order.payment_type, payment_type.id)
+        self.assertIsNotNone(order.date_paid)
+
+        Customer.delete_from_db()
+        PaymentType.delete_from_db()
+        Order.delete_from_db()
+        Product.delete_from_db()
+
 
     def test_product_popularity(self):
+        customer.id = customer.save()
 
+        product_type_id = 1
+        product_one = Product(customer.id, product_type_id)
+        product_one.id = product_one.save()  
+
+        product_two = Product(customer.id, product_type_id)
+        product_two.id = product_two.save() 
+
+        product_three = Product(customer.id, product_type_id)
+        product_three.id = product_three.save() 
+
+        order = Order(customer.id)
+        order.id = order.save()
+        order.add_product_to_order(product_one.id)
+        order.add_product_to_order(product_one.id)
+        order.add_product_to_order(product_one.id)
+        order.add_product_to_order(product_two.id)
+        order.add_product_to_order(product_two.id)
+
+        payment_type = PaymentType(customer.id)
+        payment_type.id = payment_type.save()
+
+        order.payment_type_id = order.complete_order(payment_type.id)
+        ordered_products_tuples = DB.get_ordered_products()
+
+        self.assertEqual(len(ordered_products_tuples), 2)
+        self.assertEqual(ordered_products_tuples[0][0], product_one.id)
         

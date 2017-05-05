@@ -2,7 +2,7 @@ import faker
 
 faker = faker.Faker()
 
-class Customer():
+class Customer:
     def __init__(self):
         self.first_name = faker.first_name()
         self.middle_name = faker.first_name()
