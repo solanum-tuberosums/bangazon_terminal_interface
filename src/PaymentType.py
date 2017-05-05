@@ -2,7 +2,7 @@ import faker
 
 faker = faker.Faker()
 
-class PaymentType():
+class PaymentType:
     def __init__(self, customer_id):
         self.account_label = faker.word()
         self.account_type = faker.credit_card_provider()
