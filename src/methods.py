@@ -1,3 +1,5 @@
+import sqlite3
+
 def get_all_from_table(table_name):
     return [(1, 1),(2,'j','b'), (3, 2)]
 
@@ -11,5 +13,17 @@ def flush_table(table_name):
     pass
 
 def save_to_db(table, values):
-    return 1
+    conn = sqlite3.connect('db.sqlite3')
+    c = conn.cursor()
+    valuesList = 'NULL'
+    for val in values:
+        valuesList = valuesList + ', "' + str(val) + '"'
+    sql = 'INSERT INTO {} VALUES ({})'.format(table, valuesList)
+    c.execute(sql)
+    conn.commit()
+    pk = c.lastrowid
+    c.close()
+    return pk
+
+
 
