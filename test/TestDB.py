@@ -62,7 +62,7 @@ class TestDatabaseInteractions(unittest.TestCase):
         # Insert order and get ID
         order_values = [None, self.faker.date(), customer_id, None]
 
-        save_to_db("Order", order_values)
+        save_to_db("CustomerOrder", order_values)
 
         order_id = get_active_customer_order(customer_id)
 
@@ -101,7 +101,7 @@ class TestDatabaseInteractions(unittest.TestCase):
         flush_table("Customer")
         flush_table("Product")
         flush_table("PaymentType")
-        flush_table("Order")
+        flush_table("CustomerOrder")
         flush_table("ProductOrder")
 
 
@@ -118,7 +118,7 @@ class TestDatabaseInteractions(unittest.TestCase):
         # Insert order and get ID
         order_values = [None, self.faker.date(), customer_id, None]
 
-        save_to_db("Order", order_values)
+        save_to_db("CustomerOrder", order_values)
 
         order_id = get_active_customer_order(customer_id)
 
@@ -147,7 +147,7 @@ class TestDatabaseInteractions(unittest.TestCase):
         flush_table("Customer")
         flush_table("Product")
         flush_table("PaymentType")
-        flush_table("Order")
+        flush_table("CustomerOrder")
         flush_table("ProductOrder")
 
 
@@ -175,7 +175,7 @@ class TestDatabaseInteractions(unittest.TestCase):
         flush_table("Customer")
         flush_table("Product")
         flush_table("PaymentType")
-        flush_table("Order")
+        flush_table("CustomerOrder")
         flush_table("ProductOrder")
 
 
