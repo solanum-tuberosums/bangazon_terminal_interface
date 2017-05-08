@@ -9,7 +9,7 @@ def get_all_from_table(table_name):
     elif table_name.lower() == 'product':
         ordering = 'title'
     command = 'SELECT * FROM {} ORDER BY {}'.format(table_name, ordering)
-    selection = c.execute(command)
+    selection = [row for row in c.execute(command)]
     conn.commit()
     conn.close()
     return selection

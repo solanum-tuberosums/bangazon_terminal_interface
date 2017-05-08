@@ -132,7 +132,7 @@ class TestDatabaseInteractions(unittest.TestCase):
             self.faker.random_int()]
 
         second_product_id = save_to_db("Product", second_product_values)
-    
+
         save_to_db("ProductOrder", [order_id, first_product_id])
         save_to_db("ProductOrder", [order_id, first_product_id])
         save_to_db("ProductOrder", [order_id, second_product_id])
