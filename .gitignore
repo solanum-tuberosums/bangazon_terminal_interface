@@ -2,6 +2,10 @@
 ######### POTATO-GENERATED FILES ##########
 ###########################################
 
+# Backup and swap files
+ *~
+ *.swp
+
 # Anything that ends in .db
 *.db
 
