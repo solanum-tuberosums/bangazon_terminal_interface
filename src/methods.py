@@ -1,3 +1,5 @@
+import sqlite3
+
 def get_all_from_table(table_name):
     conn = sqlite3.connect('db.sqlite3')
     c = conn.cursor()
