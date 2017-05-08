@@ -13,7 +13,7 @@ def get_active_customer_order(customer_id):
 def flush_table(table_name):
     conn = sqlite3.connect('db.sqlite3')    
     c = conn.cursor()
-    command = "DROP TABLE IF EXISTS {}".format(table_name)
+    command = "DELETE FROM {}".format(table_name)
     c.execute(command)
     conn.commit()
     conn.close()
