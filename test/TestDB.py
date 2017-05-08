@@ -8,10 +8,9 @@ class TestDatabaseInteractions(unittest.TestCase):
     def setUpClass(self):
         self.faker = faker.Faker()
 
-        customer_values = list(faker.first_name(), faker.first_name(), faker.last_name(), 
-            faker.street_address(), faker.city(), faker.state(), faker.zipcode(), 
-            faker.phone_number(), faker.date())
-    
+        customer_values = [self.faker.first_name(), self.faker.first_name(), self.faker.last_name(),
+            self.faker.street_address(), self.faker.city(), self.faker.state(), self.faker.zipcode(),
+            self.faker.phone_number(), self.faker.date()]
 
     def test_save_customer(self):
         customer_id = save_to_db("Customer", customer_values)
@@ -25,7 +24,7 @@ class TestDatabaseInteractions(unittest.TestCase):
 
     def test_save_product(self):
         customer_id = save_to_db("Customer", customer_values)
-        product_values = list(faker.word(), faker.text(), faker.random_int(), customer_id, 
+        product_values = list(faker.word(), faker.text(), faker.random_int(), customer_id,
             faker.random_int())
 
         product_id = save_to_db("Product", product_values)
@@ -43,7 +42,7 @@ class TestDatabaseInteractions(unittest.TestCase):
         customer_id = save_to_db("Customer", customer_values)
 
         # Create payment_type
-        payment_type_values = list(faker.word(), faker.credit_card_provider(), 
+        payment_type_values = list(faker.word(), faker.credit_card_provider(),
             faker.credit_card_number(), customer_id)
 
         payment_type_id = save_to_db("PaymentType", payment_type_values)
@@ -53,7 +52,7 @@ class TestDatabaseInteractions(unittest.TestCase):
         # Removes customer and payment_type data from db
         flush_table("Customer")
         flush_table("PaymentType")
-        
+
 
     def test_add_product_to_order(self):
         # Insert customer and get ID
@@ -67,12 +66,12 @@ class TestDatabaseInteractions(unittest.TestCase):
         order_id = get_active_customer_order(customer_id)
 
         # Insert products and get IDs
-        first_product_values = list(faker.word(), faker.text(), faker.random_int(), customer_id, 
+        first_product_values = list(faker.word(), faker.text(), faker.random_int(), customer_id,
             faker.random_int())
 
         first_product_id = save_to_db("Product", first_product_values)
 
-        second_product_values = list(faker.word(), faker.text(), faker.random_int(), customer_id, 
+        second_product_values = list(faker.word(), faker.text(), faker.random_int(), customer_id,
             faker.random_int())
 
         first_product_id = save_to_db("Product", first_product_values)
@@ -110,7 +109,7 @@ class TestDatabaseInteractions(unittest.TestCase):
         customer_id = save_to_db("Customer", customer_values)
 
         # Insert payment_type and get ID
-        payment_type_values = list(faker.word(), faker.credit_card_provider(), 
+        payment_type_values = list(faker.word(), faker.credit_card_provider(),
             faker.credit_card_number(), customer_id)
 
         payment_type_id = save_to_db("PaymentType", payment_type_values)
@@ -123,12 +122,12 @@ class TestDatabaseInteractions(unittest.TestCase):
         order_id = get_active_customer_order(customer_id)
 
         # Insert products and get IDs
-        first_product_values = list(faker.word(), faker.text(), faker.random_int(), customer_id, 
+        first_product_values = list(faker.word(), faker.text(), faker.random_int(), customer_id,
             faker.random_int())
 
         first_product_id = save_to_db("Product", first_product_values)
 
-        second_product_values = list(faker.word(), faker.text(), faker.random_int(), customer_id, 
+        second_product_values = list(faker.word(), faker.text(), faker.random_int(), customer_id,
             faker.random_int())
 
         save_to_db("ProductOrder", [order_id, first_product_id])
