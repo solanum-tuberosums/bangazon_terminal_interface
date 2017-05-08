@@ -24,8 +24,8 @@ class TestDatabaseInteractions(unittest.TestCase):
 
     def test_save_product(self):
         customer_id = save_to_db("Customer", customer_values)
-        product_values = list(faker.word(), faker.text(), faker.random_int(), customer_id,
-            faker.random_int())
+        product_values = [self.faker.word(), self.faker.text(), self.faker.random_int(), customer_id,
+            self.faker.random_int()]
 
         product_id = save_to_db("Product", product_values)
 
@@ -42,8 +42,8 @@ class TestDatabaseInteractions(unittest.TestCase):
         customer_id = save_to_db("Customer", customer_values)
 
         # Create payment_type
-        payment_type_values = list(faker.word(), faker.credit_card_provider(),
-            faker.credit_card_number(), customer_id)
+        payment_type_values = [self.faker.word(), self.faker.credit_card_provider(),
+            self.faker.credit_card_number(), customer_id]
 
         payment_type_id = save_to_db("PaymentType", payment_type_values)
 
@@ -59,20 +59,20 @@ class TestDatabaseInteractions(unittest.TestCase):
         customer_id = save_to_db("Customer", customer_values)
 
         # Insert order and get ID
-        order_values = list(None, faker.date(), customer_id, None)
+        order_values = [None, self.faker.date(), customer_id, None]
 
         save_to_db("Order", order_values)
 
         order_id = get_active_customer_order(customer_id)
 
         # Insert products and get IDs
-        first_product_values = list(faker.word(), faker.text(), faker.random_int(), customer_id,
-            faker.random_int())
+        first_product_values = [self.faker.word(), self.faker.text(), self.faker.random_int(), customer_id,
+            self.faker.random_int()]
 
         first_product_id = save_to_db("Product", first_product_values)
 
-        second_product_values = list(faker.word(), faker.text(), faker.random_int(), customer_id,
-            faker.random_int())
+        second_product_values = [self.faker.word(), self.faker.text(), self.faker.random_int(), customer_id,
+            self.faker.random_int()]
 
         first_product_id = save_to_db("Product", first_product_values)
         second_product_id = save_to_db("Product", second_product_values)
@@ -109,26 +109,26 @@ class TestDatabaseInteractions(unittest.TestCase):
         customer_id = save_to_db("Customer", customer_values)
 
         # Insert payment_type and get ID
-        payment_type_values = list(faker.word(), faker.credit_card_provider(),
-            faker.credit_card_number(), customer_id)
+        payment_type_values = [self.faker.word(), self.faker.credit_card_provider(),
+            self.faker.credit_card_number(), customer_id]
 
         payment_type_id = save_to_db("PaymentType", payment_type_values)
 
         # Insert order and get ID
-        order_values = list(None, faker.date(), customer_id, None)
+        order_values = [None, self.faker.date(), customer_id, None]
 
         save_to_db("Order", order_values)
 
         order_id = get_active_customer_order(customer_id)
 
         # Insert products and get IDs
-        first_product_values = list(faker.word(), faker.text(), faker.random_int(), customer_id,
-            faker.random_int())
+        first_product_values = [self.faker.word(), self.faker.text(), self.faker.random_int(), customer_id,
+            self.faker.random_int()]
 
         first_product_id = save_to_db("Product", first_product_values)
 
-        second_product_values = list(faker.word(), faker.text(), faker.random_int(), customer_id,
-            faker.random_int())
+        second_product_values = [self.faker.word(), self.faker.text(), self.faker.random_int(), customer_id,
+            self.faker.random_int()]
 
         save_to_db("ProductOrder", [order_id, first_product_id])
         save_to_db("ProductOrder", [order_id, first_product_id])
