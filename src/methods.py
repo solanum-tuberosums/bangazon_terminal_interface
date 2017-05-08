@@ -9,3 +9,7 @@ def get_active_customer_order(customer_id):
 
 def flush_table(table_name):
     pass
+
+def save_to_db(table, values):
+    return 1
+
