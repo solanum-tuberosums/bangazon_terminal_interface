@@ -10,8 +10,8 @@ class TestDatabaseInteractions(unittest.TestCase):
         self.faker = faker.Faker()
 
         self.customer_values = [self.faker.first_name(), self.faker.first_name(), self.faker.last_name(),
-            self.faker.street_address(), self.faker.city(), self.faker.state(), self.faker.zipcode(),
-            self.faker.phone_number(), self.faker.date()]
+            self.faker.first_name(), self.faker.city(), self.faker.state_abbr(), self.faker.zipcode(),
+            self.faker.random_int(), self.faker.date()]
 
     def test_save_customer(self):
         customer_id = save_to_db("Customer", self.customer_values)
@@ -62,7 +62,7 @@ class TestDatabaseInteractions(unittest.TestCase):
         # Insert order and get ID
         order_values = [None, self.faker.date(), customer_id, None]
 
-        save_to_db("Order", order_values)
+        save_to_db("CustomerOrder", order_values)
 
         order_id = get_active_customer_order(customer_id)
 
@@ -101,7 +101,7 @@ class TestDatabaseInteractions(unittest.TestCase):
         flush_table("Customer")
         flush_table("Product")
         flush_table("PaymentType")
-        flush_table("Order")
+        flush_table("CustomerOrder")
         flush_table("ProductOrder")
 
 
@@ -118,7 +118,7 @@ class TestDatabaseInteractions(unittest.TestCase):
         # Insert order and get ID
         order_values = [None, self.faker.date(), customer_id, None]
 
-        save_to_db("Order", order_values)
+        save_to_db("CustomerOrder", order_values)
 
         order_id = get_active_customer_order(customer_id)
 
@@ -147,7 +147,7 @@ class TestDatabaseInteractions(unittest.TestCase):
         flush_table("Customer")
         flush_table("Product")
         flush_table("PaymentType")
-        flush_table("Order")
+        flush_table("CustomerOrder")
         flush_table("ProductOrder")
 
 
@@ -175,7 +175,7 @@ class TestDatabaseInteractions(unittest.TestCase):
         flush_table("Customer")
         flush_table("Product")
         flush_table("PaymentType")
-        flush_table("Order")
+        flush_table("CustomerOrder")
         flush_table("ProductOrder")
 
 
