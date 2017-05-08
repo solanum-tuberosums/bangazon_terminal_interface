@@ -1,6 +1,7 @@
 import unittest
 import sys; sys.path.append('../')
 import faker
+from src.methods import *
 
 class TestDatabaseInteractions(unittest.TestCase):
 
@@ -8,12 +9,12 @@ class TestDatabaseInteractions(unittest.TestCase):
     def setUpClass(self):
         self.faker = faker.Faker()
 
-        customer_values = [self.faker.first_name(), self.faker.first_name(), self.faker.last_name(),
+        self.customer_values = [self.faker.first_name(), self.faker.first_name(), self.faker.last_name(),
             self.faker.street_address(), self.faker.city(), self.faker.state(), self.faker.zipcode(),
             self.faker.phone_number(), self.faker.date()]
 
     def test_save_customer(self):
-        customer_id = save_to_db("Customer", customer_values)
+        customer_id = save_to_db("Customer", self.customer_values)
 
         # Assert that every property for local customer equals properties of database customer
         self.assertIsNotNone(customer_id)
@@ -23,7 +24,7 @@ class TestDatabaseInteractions(unittest.TestCase):
 
 
     def test_save_product(self):
-        customer_id = save_to_db("Customer", customer_values)
+        customer_id = save_to_db("Customer", self.customer_values)
         product_values = [self.faker.word(), self.faker.text(), self.faker.random_int(), customer_id,
             self.faker.random_int()]
 
@@ -39,7 +40,7 @@ class TestDatabaseInteractions(unittest.TestCase):
 
     def test_save_payment_type(self):
         # Insert customer and get ID
-        customer_id = save_to_db("Customer", customer_values)
+        customer_id = save_to_db("Customer", self.customer_values)
 
         # Create payment_type
         payment_type_values = [self.faker.word(), self.faker.credit_card_provider(),
@@ -56,7 +57,7 @@ class TestDatabaseInteractions(unittest.TestCase):
 
     def test_add_product_to_order(self):
         # Insert customer and get ID
-        customer_id = save_to_db("Customer", customer_values)
+        customer_id = save_to_db("Customer", self.customer_values)
 
         # Insert order and get ID
         order_values = [None, self.faker.date(), customer_id, None]
@@ -106,7 +107,7 @@ class TestDatabaseInteractions(unittest.TestCase):
 
     def test_complete_order(self):
         # Insert customer and get ID
-        customer_id = save_to_db("Customer", customer_values)
+        customer_id = save_to_db("Customer", self.customer_values)
 
         # Insert payment_type and get ID
         payment_type_values = [self.faker.word(), self.faker.credit_card_provider(),
@@ -150,11 +151,11 @@ class TestDatabaseInteractions(unittest.TestCase):
 
     def test_get_all_from_customer_and_set_active_customer(self):
         # Insert customers
-        customer_id = save_to_db("Customer", customer_values)
-        save_to_db("Customer", customer_values)
-        save_to_db("Customer", customer_values)
-        save_to_db("Customer", customer_values)
-        save_to_db("Customer", customer_values)
+        customer_id = save_to_db("Customer", self.customer_values)
+        save_to_db("Customer", self.customer_values)
+        save_to_db("Customer", self.customer_values)
+        save_to_db("Customer", self.customer_values)
+        save_to_db("Customer", self.customer_values)
 
         # Get the list of all customers and set active customer id
         customer_list = get_all_from_table("Customer")
