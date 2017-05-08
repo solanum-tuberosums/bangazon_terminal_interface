@@ -10,7 +10,7 @@ class TestDatabaseInteractions(unittest.TestCase):
         self.faker = faker.Faker()
 
         self.customer_values = [self.faker.first_name(), self.faker.first_name(), self.faker.last_name(),
-            self.faker.first_name(), self.faker.city(), self.faker.state_abbr(), self.faker.zipcode(),
+            self.faker.street_address(), self.faker.city(), self.faker.state_abbr(), self.faker.zipcode(),
             self.faker.phone_number(), self.faker.date()]
 
     def test_save_customer(self):
