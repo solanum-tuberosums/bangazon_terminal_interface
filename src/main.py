@@ -1,6 +1,8 @@
 from methods import *
 import datetime
 
+active_customer_id = None
+
 def run_ordering_system():
     print("*********************************************************")
     print("**  Welcome to Bangazon! Command Line Ordering System  **")
@@ -53,7 +55,24 @@ def run_ordering_system():
         run_ordering_system()
 
     if menu_command == 3:
-        pass   
+        if active_customer_id:
+            print("Name this payment account")
+            account_label = input()
+            print("Enter payment type (e.g. AmEx, Visa, Checking)")
+            account_type = input()
+            print("Enter account number")  
+            account_number = input()
+            customer_id = active_customer_id
+            payment_type_values = list()
+            payment_type_values.extend([account_label, account_type, account_number, customer_id])
+            save_to_db("PaymentType", payment_type_values)
+            print("Your payment type was saved")
+            run_ordering_system()
+        else: 
+            print("Please select an active customer or create a new customer. Press any key to return to main menu")
+            input()
+            run_ordering_system()
+
     if menu_command == 4:
         pass    
     if menu_command == 5:
