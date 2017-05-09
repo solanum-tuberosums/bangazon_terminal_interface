@@ -71,3 +71,21 @@ CREATE TABLE ProductOrder(
     order_id                        INTEGER NOT NULL,
     FOREIGN KEY (product_id)        REFERENCES Product(id) ON DELETE CASCADE,
     FOREIGN KEY (order_id)          REFERENCES CustomerOrder(id) ON DELETE CASCADE);
+
+
+--INSERT Statements to Create Dummy Products for Testing
+INSERT INTO Customer Values(NULL, 'Jeremy', 'Will', 'Smith', '500 Interstate Blvd S.', 'Nashville', 'TN', '37201', '615-888-5555', '05-09-2017');
+INSERT INTO Customer Values(NULL, 'Blaise', 'Zak', 'Williams', '500 Interstate Blvd S.', 'Nashville', 'TN', '37201', '615-888-5555', '05-09-2017');
+INSERT INTO Customer Values(NULL, 'Jessica', 'Z.', 'Michaels', '500 Interstate Blvd S.', 'Nashville', 'TN', '37201', '615-888-5555', '05-09-2017');
+INSERT INTO ProductType Values(NULL, 'Round Toys');
+INSERT INTO ProductType Values(NULL, 'Angular Toys');
+INSERT INTO Product VALUES (NULL, 19.99, "Red Ball", "Bouncy", 1, 1);
+INSERT INTO Product VALUES (NULL, 19.99, "Red Ball", "Bouncy", 1, 2);
+INSERT INTO Product VALUES (NULL, 19.99, "Red Ball", "Bouncy", 1, 3);
+INSERT INTO Product VALUES (NULL, 15.99, "Green Ball", "Squishy", 1, 1);
+INSERT INTO Product VALUES (NULL, 15.99, "Green Ball", "Squishy", 1, 2);
+INSERT INTO Product VALUES (NULL, 15.99, "Green Ball", "Squishy", 1, 3);
+INSERT INTO Product VALUES (NULL, 15.99, "Green Ball", "Squishy", 1, 1);
+INSERT INTO Product VALUES (NULL, 5.99, "Blocks", "Hard", 2, 1);
+INSERT INTO Product VALUES (NULL, 5.99, "Blocks", "Hard", 2, 1);
+INSERT INTO Product VALUES (NULL, 5.99, "Blocks", "Hard", 2, 1);
