@@ -82,7 +82,6 @@ class TestDatabaseInteractions(unittest.TestCase):
         first_chosen_product_from_menu = 1
         second_chosen_product_from_menu = 2
         chosen_product_pk_index = 0
-        print([item for item in product_list])
 
         first_chosen_product_id = product_list[first_chosen_product_from_menu-1][chosen_product_pk_index]
         second_chosen_product_id = product_list[second_chosen_product_from_menu-1][chosen_product_pk_index]
