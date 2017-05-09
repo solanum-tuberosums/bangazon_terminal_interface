@@ -154,11 +154,13 @@ class TestDatabaseInteractions(unittest.TestCase):
         self.assertEqual(customer_id, active_customer_id)
 
 
+
         flush_table("Customer")
         flush_table("Product")
         flush_table("PaymentType")
         flush_table("CustomerOrder")
         flush_table("ProductOrder")
+
 
     def test_get_order_total(self):
          # Insert customer and get ID
@@ -197,5 +199,4 @@ class TestDatabaseInteractions(unittest.TestCase):
         total_from_db = get_order_total(order_id)
 
         self.assertEqual(total_from_db, total)
-
 
