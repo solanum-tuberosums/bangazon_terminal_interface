@@ -8,6 +8,10 @@ def get_all_from_table(table_name=None, db='db.sqlite3'):
         ordering = 'last_name'
     elif table_name.lower() == 'product':
         ordering = 'id'
+    command = 'SELECT * FROM {} ORDER BY {}'.format(table_name, ordering)
+    selection = [row for row in c.execute(command)]
+    conn.commit()
+    conn.close()
     return selection
 
 def complete_order(order_id, pmt_type_id):
@@ -29,11 +33,13 @@ def get_active_customer_order(customer_id=None, db='db.sqlite3'):
     selection = [row for row in c.execute(command)]
     conn.commit()
     conn.close()
-    if selection[0][3] != None:
-        print('Customer {} has no active orders. Please create a new order for the customer if you wish to make any changes.')
+
+    if selection[0][3] != 'None':
+        print('Customer {} has no active orders. Please create a new order for the customer if you wish to make any changes.'.format(customer_id))
         print('Last order was completed on {}'.format(selection[0][3]))
+        return None
     else:
-        return selection[0][0]
+        return selection[0]
 
 def flush_table(table_name=None, db='db.sqlite3'):
     conn = sqlite3.connect(db)
