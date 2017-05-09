@@ -20,8 +20,12 @@ def run_ordering_system(menu_command=None):
         menu_command = int(input("Please select the number that corresponds to your menu option\n"))
 
     if menu_command == 1:
-        print("Enter customer name")
-        customer_name = input()
+        print("Enter customer first name")
+        customer_first_name = input()
+        print("Enter customer middle initial")
+        customer_middle_name = input()
+        print("Enter customer last name")
+        customer_last_name = input()
         print("Enter street address")
         street_address = input()
         print("Enter city")
@@ -36,7 +40,7 @@ def run_ordering_system(menu_command=None):
         customer_values = list()
 
         #need to split customer_name into first, middle, last
-        customer_values.extend([customer_name, street_address, city, state, postal_code, phone_number, datetime.datetime.now()])
+        customer_values.extend([customer_first_name, customer_middle_name, customer_last_name, street_address, city, state, postal_code, phone_number, datetime.datetime.now()])
         active_customer_id = save_to_db("Customer", customer_values)
         print("You added a new customer")
         run_ordering_system()
@@ -70,8 +74,7 @@ def run_ordering_system(menu_command=None):
             print("Your payment type was saved")
             run_ordering_system()
         else: 
-            print("Please select an active customer or create a new customer. Press any key to return to main menu")
-            input()
+            input("Please select an active customer or create a new customer. Press any key to return to main menu.\n")
             run_ordering_system()
 
     # if menu_command == 4:
@@ -100,13 +103,47 @@ def run_ordering_system(menu_command=None):
     #         print("Please select an active customer or create a new customer. Press any key to return to main menu")
     #         input()
     #         run_ordering_system()  
-    # if menu_command == 5:
-    #     pass    
-    # if menu_command == 6:
-    #     pass    
-    # if menu_command == 7:
-    #     print("See ya Sucka, thanks for visiting Bangazon.")
-    #     pass
+    if menu_command == 5:
+        # Check active_customer and get order
+        if active_customer_id:
+            order_id = get_active_customer_order(active_customer_id)
+            order_total = get_order_total(order_id)
+            # Check order total
+            if order_total > 0:
+                print("Your order total is ${}. Ready to purchase?".format(order_total))
+                response = input("Y/N\t")
+                if response.lower() == "y":
+                    # Get payment types for customer
+                    payment_type_list = get_all_from_table("PaymentType", customer_id=active_customer_id)
+                    print("Choose a payment option")
+                    for counter, payment in enumerate(payment_type_list):
+                        print(str(counter+1)+". ", payment_type_list[1], payment_type_list[2])
+                    chosen_payment_type = int(input())
+                    chosen_payment_type_id = payment_type_list[chosen_payment_type-1][0]
+                    # Update order with chosen payment type id and date paid
+                    complete_order(order_id, chosen_payment_type_id)
+                    input("Your order is complete! Press any key to return to main menu.\n")
+                    run_ordering_system()
+                elif: 
+                    response.lower() == "n"
+                    run_ordering_system()
+                else:
+                    input("Please press Y or N")
+                    run_ordering_system(menu_command=5)
+
+            else:
+                input("Please add some products to your order first. Press any key to return to main menu.\n")
+                run_ordering_system()
+
+        else: 
+            input("Please select an active customer or create a new customer. Press any key to return to main menu.\n")
+            run_ordering_system()
+
+    if menu_command == 6:
+        pass    
+    if menu_command == 7:
+        print("See ya Sucka, thanks for visiting Bangazon.")
+        pass
 
 
 
