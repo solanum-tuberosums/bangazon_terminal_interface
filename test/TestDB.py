@@ -60,11 +60,20 @@ class TestDatabaseInteractions(unittest.TestCase):
         customer_id = save_to_db("Customer", self.customer_values)
 
         # Insert order and get ID
-        order_values = [None, self.faker.date(), customer_id, None]
 
-        save_to_db("CustomerOrder", order_values)
+        order_values_1 = [None, '2015-01-27', customer_id, '2015-02-27']
+        save_to_db("CustomerOrder", order_values_1)
 
-        order_id = get_active_customer_order(customer_id)
+        order = get_active_customer_order(customer_id)
+        self.assertEqual(None, order)
+
+        order_values_2 = [None, '2007-08-06', customer_id, None]
+        order_values_3 = [None, '2016-01-27', customer_id, None]
+        save_to_db("CustomerOrder", order_values_2)
+        save_to_db("CustomerOrder", order_values_3)
+
+        order = get_active_customer_order(customer_id)
+        self.assertTrue('2016-01-27' in order)
 
         # Insert products and get IDs
         first_product_values = [self.faker.word(), self.faker.text(), self.faker.random_int(), customer_id,
@@ -86,14 +95,14 @@ class TestDatabaseInteractions(unittest.TestCase):
         first_chosen_product_id = product_list[first_chosen_product_from_menu-1][chosen_product_pk_index]
         second_chosen_product_id = product_list[second_chosen_product_from_menu-1][chosen_product_pk_index]
 
-        first_productorder_id = save_to_db("ProductOrder", [order_id, first_chosen_product_id])
-        second_productorder_id = save_to_db("ProductOrder", [order_id, first_chosen_product_id])
-        third_productorder_id = save_to_db("ProductOrder", [order_id, second_chosen_product_id])
+        first_productorder = save_to_db("ProductOrder", [order[0], first_chosen_product_id])
+        second_productorder_id = save_to_db("ProductOrder", [order[0], first_chosen_product_id])
+        third_productorder_id = save_to_db("ProductOrder", [order[0], second_chosen_product_id])
 
         self.assertEqual(first_product_id, first_chosen_product_id)
         # self.assertEqual(second_product_id, second_chosen_product_id)
-        self.assertIsNotNone(order_id)
-        self.assertIsNotNone(first_productorder_id)
+        self.assertIsNotNone(order)
+        self.assertIsNotNone(first_productorder)
         self.assertIsNotNone(second_productorder_id)
         self.assertIsNotNone(third_productorder_id)
 
@@ -176,6 +185,3 @@ class TestDatabaseInteractions(unittest.TestCase):
         flush_table("PaymentType")
         flush_table("CustomerOrder")
         flush_table("ProductOrder")
-
-
-
