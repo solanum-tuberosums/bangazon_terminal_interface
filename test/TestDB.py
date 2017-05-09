@@ -85,14 +85,14 @@ class TestDatabaseInteractions(unittest.TestCase):
         first_chosen_product_id = product_list[first_chosen_product_from_menu-1][chosen_product_pk_index]
         second_chosen_product_id = product_list[second_chosen_product_from_menu-1][chosen_product_pk_index]
 
-        first_productorder = save_to_db("ProductOrder", [order[0], first_chosen_product_id])
+        first_productorder_id = save_to_db("ProductOrder", [order[0], first_chosen_product_id])
         second_productorder_id = save_to_db("ProductOrder", [order[0], first_chosen_product_id])
         third_productorder_id = save_to_db("ProductOrder", [order[0], second_chosen_product_id])
 
         self.assertEqual(first_product_id, first_chosen_product_id)
         # self.assertEqual(second_product_id, second_chosen_product_id)
         self.assertIsNotNone(order)
-        self.assertIsNotNone(first_productorder)
+        self.assertIsNotNone(first_productorder_id)
         self.assertIsNotNone(second_productorder_id)
         self.assertIsNotNone(third_productorder_id)
 
