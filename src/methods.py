@@ -1,13 +1,13 @@
 import sqlite3
 
-def get_all_from_table(table_name):
-    conn = sqlite3.connect('db.sqlite3')
+def get_all_from_table(table_name=None, db='db.sqlite3'):
+    conn = sqlite3.connect(db)
     c = conn.cursor()
-    ordering = str()
+    ordering = ' '
     if table_name.lower() == 'customer':
         ordering = 'last_name'
     elif table_name.lower() == 'product':
-        ordering = 'title'
+        ordering = 'id'
     command = 'SELECT * FROM {} ORDER BY {}'.format(table_name, ordering)
     selection = [row for row in c.execute(command)]
     conn.commit()
@@ -20,8 +20,8 @@ def complete_order(order_id, pmt_type_id):
 def get_active_customer_order(customer_id):
     return 1
 
-def flush_table(table_name):
-    conn = sqlite3.connect('db.sqlite3')
+def flush_table(table_name=None, db='db.sqlite3'):
+    conn = sqlite3.connect(db)
     c = conn.cursor()
     command = "DELETE FROM {}".format(table_name)
     c.execute(command)
