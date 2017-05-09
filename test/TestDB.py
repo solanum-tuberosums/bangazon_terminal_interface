@@ -25,8 +25,7 @@ class TestDatabaseInteractions(unittest.TestCase):
 
     def test_save_product(self):
         customer_id = save_to_db("Customer", self.customer_values)
-        product_values = [self.faker.word(), self.faker.text(), self.faker.random_int(), customer_id,
-            self.faker.random_int()]
+        product_values = [self.faker.random_int(), self.faker.word(), self.faker.text(), 1, 1]
 
         product_id = save_to_db("Product", product_values)
 
@@ -67,13 +66,11 @@ class TestDatabaseInteractions(unittest.TestCase):
         order_id = get_active_customer_order(customer_id)
 
         # Insert products and get IDs
-        first_product_values = [self.faker.word(), self.faker.text(), self.faker.random_int(), customer_id,
-            self.faker.random_int()]
+        first_product_values = [self.faker.random_int(), self.faker.word(), self.faker.text(), 1, 1]
 
         first_product_id = save_to_db("Product", first_product_values)
 
-        second_product_values = [self.faker.word(), self.faker.text(), self.faker.random_int(), customer_id,
-            self.faker.random_int()]
+        second_product_values = [self.faker.random_int(), self.faker.word(), self.faker.text(), 1, 1]
 
         second_product_id = save_to_db("Product", second_product_values)
 
@@ -122,19 +119,17 @@ class TestDatabaseInteractions(unittest.TestCase):
         order_id = get_active_customer_order(customer_id)
 
         # Insert products and get IDs
-        first_product_values = [self.faker.word(), self.faker.text(), self.faker.random_int(), customer_id,
-            self.faker.random_int()]
+        first_product_values = [self.faker.random_int(), self.faker.word(), self.faker.text(), 1, 1]
 
         first_product_id = save_to_db("Product", first_product_values)
 
-        second_product_values = [self.faker.word(), self.faker.text(), self.faker.random_int(), customer_id,
-            self.faker.random_int()]
+        second_product_values = [self.faker.random_int(), self.faker.word(), self.faker.text(), 1, 1]
 
         second_product_id = save_to_db("Product", second_product_values)
 
-        save_to_db("ProductOrder", [order_id, first_product_id])
-        save_to_db("ProductOrder", [order_id, first_product_id])
-        save_to_db("ProductOrder", [order_id, second_product_id])
+        save_to_db("ProductOrder", [first_product_id, order_id])
+        save_to_db("ProductOrder", [first_product_id, order_id])
+        save_to_db("ProductOrder", [second_product_id, order_id])
 
         ####### Important method, to update selected order ######
         order_tuple = complete_order(order_id, payment_type_id)
@@ -177,5 +172,42 @@ class TestDatabaseInteractions(unittest.TestCase):
         flush_table("CustomerOrder")
         flush_table("ProductOrder")
 
+    def test_get_order_total(self):
+         # Insert customer and get ID
+        customer_id = save_to_db("Customer", self.customer_values)
+
+        # Insert payment_type and get ID
+        payment_type_values = [self.faker.word(), self.faker.credit_card_provider(),
+            self.faker.credit_card_number(), customer_id]
+
+        payment_type_id = save_to_db("PaymentType", payment_type_values)
+
+        # Insert order and get ID
+        order_values = [None, self.faker.date(), customer_id, None]
+
+        save_to_db("CustomerOrder", order_values)
+
+        order_id = get_active_customer_order(customer_id)
+
+        # Insert products and get IDs
+        product_one_price = self.faker.random_int()
+        product_two_price = self.faker.random_int()
+
+        first_product_values = [product_one_price, self.faker.word(), self.faker.text(), 1, customer_id]
+
+        first_product_id = save_to_db("Product", first_product_values)
+
+        second_product_values = [product_two_price, self.faker.word(), self.faker.text(), 1, customer_id]
+
+        second_product_id = save_to_db("Product", second_product_values)
+
+        save_to_db("ProductOrder", [first_product_id, order_id])
+        save_to_db("ProductOrder", [first_product_id, order_id])
+        save_to_db("ProductOrder", [second_product_id, order_id])
+
+        total = int(product_one_price) + int(product_one_price) + int(product_two_price)
+        total_from_db = get_order_total(order_id)
+
+        self.assertEqual(total_from_db, total)
 
 
