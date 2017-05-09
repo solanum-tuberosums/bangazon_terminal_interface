@@ -42,7 +42,18 @@ def save_to_db(table, values):
     return pk
 
 def get_order_total(order_id):
-    return 2745.72
+    conn = sqlite3.connect('db.sqlite3')
+    c = conn.cursor()
+    
+    sql = "SELECT SUM(p.price) FROM ProductOrder po LEFT JOIN Product p ON po.product_id = Product.id WHERE ProductOrder.order_id = {}".format(int(order_id))
+    c.execute(sql)
+    conn.commit()
+
+    # Get (and convert to float) the first index of the first index of the tuple returned from the query
+    order_total = float(c.fetchall()[0][0])
+
+    c.close()
+    return order_total
 
 def get_popular_products():
     return [('AA Batteries', 100, 20, 990.90),('Diapers', 50, 10, 640.95), ('Case Crackling Cola', 40, 30, 270.96)]
