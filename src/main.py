@@ -116,25 +116,35 @@ def run_ordering_system(menu_command=None):
     if menu_command == 5:
         # Check active_customer and get order
         if active_customer_id:
-            order_tuple = get_active_customer_order(active_customer_id)
-            order_id = order_tuple[0]
+            try:
+                order_tuple = get_active_customer_order(active_customer_id)
+                order_id = order_tuple[0]
+            except:
+                order_values = [None, datetime.datetime.now(), active_customer_id, None]
+                order_id = save_to_db("CustomerOrder", order_values)
+
             order_total = get_order_total(order_id)
             # Check order total
-            if order_total > 0:
+            if order_total != None:
                 print("Your order total is ${}. Ready to purchase?".format(order_total))
                 response = input("Y/N\t")
                 if response.lower() == "y":
                     # Get payment types for customer
                     payment_type_list = get_all_from_table("PaymentType", customer_id=active_customer_id)
-                    print("Choose a payment option")
-                    for counter, payment in enumerate(payment_type_list):
-                        print(str(counter+1)+". ", payment[1], payment[2])
-                    chosen_payment_type = int(input())
-                    chosen_payment_type_id = payment_type_list[chosen_payment_type-1][0]
-                    # Update order with chosen payment type id and date paid
-                    complete_order(order_id, chosen_payment_type_id)
-                    input("Your order is complete! Press any key to return to main menu.\n")
-                    run_ordering_system()
+                    if len(payment_type_list) > 0:
+                        print("Choose a payment option")
+                        for counter, payment in enumerate(payment_type_list):
+                            print(str(counter+1)+". ", payment[1], payment[2])
+                        chosen_payment_type = int(input())
+                        chosen_payment_type_id = payment_type_list[chosen_payment_type-1][0]
+                        # Update order with chosen payment type id and date paid
+                        complete_order(order_id, chosen_payment_type_id)
+                        input("Your order is complete! Press any key to return to main menu.\n")
+                        run_ordering_system()
+                    else:
+                        input("Please create a payment type for the customer")
+                        run_ordering_system(menu_command=3)
+                        
                 elif response.lower() == "n": 
                     run_ordering_system()
                 else:

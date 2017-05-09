@@ -43,12 +43,12 @@ def get_active_customer_order(customer_id=None, db='db.sqlite3'):
     conn.commit()
     conn.close()
 
-    if selection[0][3] != 'None':
-        print('Customer {} has no active orders. Please create a new order for the customer if you wish to make any changes.'.format(customer_id))
-        print('Last order was completed on {}'.format(selection[0][3]))
-        return None
-    else:
-        return selection[0]
+    # if selection[0][3] != None:
+    #     print('Customer {} has no active orders. Please create a new order for the customer if you wish to make any changes.'.format(customer_id))
+    #     print('Last order was completed on {}'.format(selection[0][3]))
+    #     return None
+    # else:
+    #     return selection[0]
 
 def flush_table(table_name=None, db='db.sqlite3'):
     conn = sqlite3.connect(db)
