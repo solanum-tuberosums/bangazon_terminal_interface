@@ -191,5 +191,3 @@ class TestDatabaseInteractions(unittest.TestCase):
         total_from_db = get_order_total(order_id)
 
         self.assertEqual(total_from_db, total)
-
-
