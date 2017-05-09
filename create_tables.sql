@@ -1,13 +1,13 @@
 ------------------------------------------------------------------------
 --- Only use these commands once you run the CREATE TABLE statements ---
 ------------------------------------------------------------------------
-DROP TABLE Department;
-DROP TABLE Customer;
-DROP TABLE PaymentType;
-DROP TABLE ProductType;
-DROP TABLE Product;
-DROP TABLE CustomerOrder;
-DROP TABLE ProductOrder;
+DROP TABLE IF EXISTS ProductOrder;
+DROP TABLE IF EXISTS CustomerOrder;
+DROP TABLE IF EXISTS Product;
+DROP TABLE IF EXISTS PaymentType;
+DROP TABLE IF EXISTS Customer;
+DROP TABLE IF EXISTS Department;
+DROP TABLE IF EXISTS ProductType;
 ------------------------------------------------------------------------
 
 

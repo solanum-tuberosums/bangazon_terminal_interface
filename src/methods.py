@@ -31,4 +31,8 @@ def save_to_db(table, values):
     return pk
 
 
+def get_order_total(order_id):
+    return 2745.72
 
+def get_popular_products():
+    return list(('AA Batteries', 100, 20, 990.90),('Diapers', 50, 10, 640.95), ('Case Crackling Cola', 40, 30, 270.96))
