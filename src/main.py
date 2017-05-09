@@ -143,7 +143,7 @@ def run_ordering_system(menu_command=None):
                         input("Your order is complete! Press enter to return to main menu.\n")
                         run_ordering_system()
                     else:
-                        input("Please create a payment type for the customer")
+                        input("Customer has no payment types. Press enter to create a payment type for customer.")
                         run_ordering_system(menu_command=3)
 
                 elif response.lower() == "n": 
