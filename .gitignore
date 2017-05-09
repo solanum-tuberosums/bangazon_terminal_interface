@@ -3,8 +3,13 @@
 ###########################################
 
 # Backup and swap files
+<<<<<<< HEAD
+ *~
+ *.swp
+=======
 *~
 *.swp
+>>>>>>> master
 
 # Anything that ends in .db
 *.db
