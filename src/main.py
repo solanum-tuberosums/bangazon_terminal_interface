@@ -118,7 +118,7 @@ def run_ordering_system(menu_command=None):
         if active_customer_id:
             order_tuple = get_active_customer_order(active_customer_id)
             order_id = order_tuple[0]
-            order_total = int(get_order_total(order_id))
+            order_total = get_order_total(order_id)
             # Check order total
             if order_total > 0:
                 print("Your order total is ${}. Ready to purchase?".format(order_total))
