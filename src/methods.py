@@ -14,32 +14,54 @@ def get_all_from_table(table_name=None, db='db.sqlite3'):
     conn.close()
     return selection
 
-def complete_order(order_id, pmt_type_id):
-    return (1, 3, '2016-01-21', 5, '2017-01-01')
+def complete_order(order_id=None, pmt_type_id=None, db='db.sqlite3'):
+
+    with sqlite3.connect(db) as conn:
+        c = conn.cursor()
+
+        update_order = '''
+                     UPDATE CustomerOrder
+                     SET payment_type_id = {1}, date_paid = GETDATE()
+                     WHERE order_id == {0}
+                  '''.format(order_id, pmt_type_id)
+        c.execute(update_order)
+        conn.commit()
+
+        order_id = c.lastrowid()
+        get_last_order = '''
+                        SELECT *
+                        FROM CustomerOrder
+                        WHERE order_id == {}
+                    '''.format(order_id)
+        completed_order = [row for row in c.execute(get_last_order)]
+
+        return completed_order
 
 def get_active_customer_order(customer_id=None, db='db.sqlite3'):
-    conn = sqlite3.connect(db)
-    c = conn.cursor()
-    command = '''SELECT o.id, o.customer_id, o.date_begun, o.date_paid
-                 FROM CustomerOrder o
-                 INNER JOIN (
-                    SELECT customer_id, max(date_begun) as MaxDate
-                    FROM CustomerOrder
-                    WHERE customer_id == {0}
-                 ) mco
-                 ON o.customer_id == mco.customer_id
-                 AND o.date_begun == mco.MaxDate
-                 '''.format(customer_id)
-    selection = [row for row in c.execute(command)]
-    conn.commit()
-    conn.close()
 
-    if selection[0][3] != 'None':
-        print('Customer {} has no active orders. Please create a new order for the customer if you wish to make any changes.'.format(customer_id))
-        print('Last order was completed on {}'.format(selection[0][3]))
-        return None
-    else:
-        return selection[0]
+    with sqlite3.connect(db) as conn:
+        c = conn.cursor()
+        command = '''SELECT o.id, o.customer_id, o.date_begun, o.date_paid
+                     FROM CustomerOrder o
+                     INNER JOIN (
+                        SELECT customer_id, max(date_begun) as MaxDate
+                        FROM CustomerOrder
+                        WHERE customer_id == {0}
+                     ) mco
+                     ON o.customer_id == mco.customer_id
+                     AND o.date_begun == mco.MaxDate
+                     '''.format(customer_id)
+        selection = [row for row in c.execute(command)]
+        conn.commit()
+
+        if selection[0][3] != 'None':
+
+            print('Customer {} has no active orders. Please create a new order for the customer if you wish to make any changes.'.format(customer_id))
+            print('Last order was completed on {}'.format(selection[0][3]))
+            return None
+
+        else:
+            return selection[0]
 
 def flush_table(table_name=None, db='db.sqlite3'):
     conn = sqlite3.connect(db)
