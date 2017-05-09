@@ -75,7 +75,6 @@ class TestDatabaseInteractions(unittest.TestCase):
         second_product_values = [self.faker.word(), self.faker.text(), self.faker.random_int(), customer_id,
             self.faker.random_int()]
 
-        first_product_id = save_to_db("Product", first_product_values)
         second_product_id = save_to_db("Product", second_product_values)
 
         product_list = get_all_from_table("Product")
@@ -132,7 +131,7 @@ class TestDatabaseInteractions(unittest.TestCase):
             self.faker.random_int()]
 
         second_product_id = save_to_db("Product", second_product_values)
-    
+
         save_to_db("ProductOrder", [order_id, first_product_id])
         save_to_db("ProductOrder", [order_id, first_product_id])
         save_to_db("ProductOrder", [order_id, second_product_id])
