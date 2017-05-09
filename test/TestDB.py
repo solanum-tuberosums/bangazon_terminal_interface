@@ -153,15 +153,6 @@ class TestDatabaseInteractions(unittest.TestCase):
         self.assertIsNotNone(active_customer_id)
         self.assertEqual(customer_id, active_customer_id)
 
-
-
-        flush_table("Customer")
-        flush_table("Product")
-        flush_table("PaymentType")
-        flush_table("CustomerOrder")
-        flush_table("ProductOrder")
-
-
     def test_get_order_total(self):
          # Insert customer and get ID
         customer_id = save_to_db("Customer", self.customer_values)
