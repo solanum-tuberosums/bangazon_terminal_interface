@@ -74,39 +74,39 @@ def run_ordering_system(menu_command=None):
             input()
             run_ordering_system()
 
-    if menu_command == 4:
-        if active_customer_id:
-            try:
-                order_id = get_active_customer_order(active_customer_id)
-            except:
-                order_values = [None, datetime.datetime.now(), active_customer_id, None]
-                order_id = save_to_db("CustomerOrder", order_vales)
-            product_list = get_all_from_table("Product")
-            exit_command = (9999,9999,"Done Adding Products")
-            product_list.append(exit_command)
-            # Print list of all customer
-            for counter, product in enumerate(product_list):
-                print(str(counter+1)+". ", product[2])
-            chosen_product_from_menu = int(input())
-            # Check to see if they exited program
-            if len(product_list) == chosen_product_from_menu:
-                run_ordering_system()
-            else:
-                product_id = product_list[chosen_product_from_menu-1][0]
-                save_to_db("ProductOrder", (order_id, product_id))
-                run_ordering_system(menu_command=4)
+    # if menu_command == 4:
+    #     if active_customer_id:
+    #         try:
+    #             order_id = get_active_customer_order(active_customer_id)
+    #         except:
+    #             order_values = [None, datetime.datetime.now(), active_customer_id, None]
+    #             order_id = save_to_db("CustomerOrder", order_vales)
+    #         product_list = get_all_from_table("Product")
+    #         exit_command = (9999,9999,"Done Adding Products")
+    #         product_list.append(exit_command)
+    #         # Print list of all customer
+    #         for counter, product in enumerate(product_list):
+    #             print(str(counter+1)+". ", product[2])
+    #         chosen_product_from_menu = int(input())
+    #         # Check to see if they exited program
+    #         if len(product_list) == chosen_product_from_menu:
+    #             run_ordering_system()
+    #         else:
+    #             product_id = product_list[chosen_product_from_menu-1][0]
+    #             save_to_db("ProductOrder", (order_id, product_id))
+    #             run_ordering_system(menu_command=4)
 
-        else: 
-            print("Please select an active customer or create a new customer. Press any key to return to main menu")
-            input()
-            run_ordering_system()  
-    if menu_command == 5:
-        pass    
-    if menu_command == 6:
-        pass    
-    if menu_command == 7:
-        print("See ya Sucka, thanks for visiting Bangazon.")
-        pass
+    #     else: 
+    #         print("Please select an active customer or create a new customer. Press any key to return to main menu")
+    #         input()
+    #         run_ordering_system()  
+    # if menu_command == 5:
+    #     pass    
+    # if menu_command == 6:
+    #     pass    
+    # if menu_command == 7:
+    #     print("See ya Sucka, thanks for visiting Bangazon.")
+    #     pass
 
 
 
