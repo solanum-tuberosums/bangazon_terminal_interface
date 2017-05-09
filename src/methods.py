@@ -1,7 +1,8 @@
 import sqlite3
 
 
-def get_all_from_table(table_name=None, db='db.sqlite3', customer_id=None):
+def get_all_from_table(table_name, customer_id=None):
+    db = 'db.sqlite3'
     conn = sqlite3.connect(db)
     c = conn.cursor()
     if customer_id:
@@ -26,7 +27,8 @@ def get_all_from_table(table_name=None, db='db.sqlite3', customer_id=None):
 def complete_order(order_id, pmt_type_id):
     return (1, 3, '2016-01-21', 5, '2017-01-01')
 
-def get_active_customer_order(customer_id=None, db='db.sqlite3'):
+def get_active_customer_order(customer_id):
+    db='db.sqlite3'
     conn = sqlite3.connect(db)
     c = conn.cursor()
     command = '''SELECT o.id, o.customer_id, o.date_begun, o.date_paid
@@ -42,13 +44,7 @@ def get_active_customer_order(customer_id=None, db='db.sqlite3'):
     selection = [row for row in c.execute(command)]
     conn.commit()
     conn.close()
-
-    # if selection[0][3] != None:
-    #     print('Customer {} has no active orders. Please create a new order for the customer if you wish to make any changes.'.format(customer_id))
-    #     print('Last order was completed on {}'.format(selection[0][3]))
-    #     return None
-    # else:
-    #     return selection[0]
+    return selection[0]
 
 def flush_table(table_name=None, db='db.sqlite3'):
     conn = sqlite3.connect(db)
