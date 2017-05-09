@@ -8,17 +8,32 @@ def get_all_from_table(table_name=None, db='db.sqlite3'):
         ordering = 'last_name'
     elif table_name.lower() == 'product':
         ordering = 'id'
-    command = 'SELECT * FROM {} ORDER BY {}'.format(table_name, ordering)
-    selection = [row for row in c.execute(command)]
-    conn.commit()
-    conn.close()
     return selection
 
 def complete_order(order_id, pmt_type_id):
     return (1, 3, '2016-01-21', 5, '2017-01-01')
 
-def get_active_customer_order(customer_id):
-    return 1
+def get_active_customer_order(customer_id=None, db='db.sqlite3'):
+    conn = sqlite3.connect(db)
+    c = conn.cursor()
+    command = '''SELECT o.id, o.customer_id, o.date_begun, o.date_paid
+                 FROM CustomerOrder o
+                 INNER JOIN (
+                    SELECT customer_id, max(date_begun) as MaxDate
+                    FROM CustomerOrder
+                    WHERE customer_id == {0}
+                 ) mco
+                 ON o.customer_id == mco.customer_id
+                 AND o.date_begun == mco.MaxDate
+                 '''.format(customer_id)
+    selection = [row for row in c.execute(command)]
+    conn.commit()
+    conn.close()
+    if selection[0][3] != None:
+        print('Customer {} has no active orders. Please create a new order for the customer if you wish to make any changes.')
+        print('Last order was completed on {}'.format(selection[0][3]))
+    else:
+        return selection[0][0]
 
 def flush_table(table_name=None, db='db.sqlite3'):
     conn = sqlite3.connect(db)
