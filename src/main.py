@@ -105,7 +105,7 @@ def run_ordering_system(menu_command=None):
             # Add product to order and reopen product menu
             else:
                 product_id = product_list[chosen_product_from_menu-1][0]
-                save_to_db("ProductOrder", (order_id, product_id))
+                save_to_db("ProductOrder", (product_id, order_id))
                 run_ordering_system(menu_command=4)
         else: 
             print("Please select an active customer or create a new customer. Press any key to return to main menu")
@@ -221,7 +221,7 @@ def run_ordering_system(menu_command=None):
         run_ordering_system()
         
     if menu_command == 7:
-        print("See ya Sucka, thanks for visiting Bangazon.")
+        print("Cya, Sucka! Thanks for visiting Bangazon.")
         pass
 
 
