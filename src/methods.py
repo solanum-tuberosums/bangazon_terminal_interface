@@ -1,19 +1,26 @@
 import sqlite3
 
 
-def get_all_from_table(table_name=None, db='db.sqlite3'):
+def get_all_from_table(table_name=None, db='db.sqlite3', customer_id=None):
     conn = sqlite3.connect(db)
     c = conn.cursor()
-    ordering = ' '
-    if table_name.lower() == 'customer':
-        ordering = 'last_name'
-    elif table_name.lower() == 'product':
-        ordering = 'id'
-    command = 'SELECT * FROM {} ORDER BY {}'.format(table_name, ordering)
-    selection = [row for row in c.execute(command)]
-    conn.commit()
-    conn.close()
-    return selection
+    if customer_id:
+        command = 'SELECT * FROM paymenttype pt, where pt.customer_id = {}'.format(str(customer_id))
+        selection = [row for row in c.execute(command)]
+        conn.commit()
+        conn.close()
+        return selection
+    else:
+        ordering = ' '
+        if table_name.lower() == 'customer':
+            ordering = 'last_name'
+        elif table_name.lower() == 'product':
+            ordering = 'id'
+        command = 'SELECT * FROM {} ORDER BY {}'.format(table_name, ordering)
+        selection = [row for row in c.execute(command)]
+        conn.commit()
+        conn.close()
+        return selection
 
 
 def complete_order(order_id, pmt_type_id):
