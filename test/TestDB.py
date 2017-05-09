@@ -13,15 +13,18 @@ class TestDatabaseInteractions(unittest.TestCase):
             self.faker.street_address(), self.faker.city(), self.faker.state_abbr(), self.faker.zipcode(),
             self.faker.phone_number(), self.faker.date()]
 
+    def tearDown(self):
+        flush_table('Customer')
+        flush_table('Product')
+        flush_table('ProductOrder')
+        flush_table('CustomerOrder')
+        flush_table('PaymentType')
+
     def test_save_customer(self):
         customer_id = save_to_db("Customer", self.customer_values)
 
         # Assert that every property for local customer equals properties of database customer
         self.assertIsNotNone(customer_id)
-
-        # Removes customer data from db
-        flush_table("Customer")
-
 
     def test_save_product(self):
         customer_id = save_to_db("Customer", self.customer_values)
@@ -31,11 +34,6 @@ class TestDatabaseInteractions(unittest.TestCase):
 
         # Assert that every property for local product equals properties of database product
         self.assertIsNotNone(product_id)
-
-        # Removes customer and product data from db
-        flush_table("Customer")
-        flush_table("Product")
-
 
     def test_save_payment_type(self):
         # Insert customer and get ID
@@ -49,21 +47,25 @@ class TestDatabaseInteractions(unittest.TestCase):
 
         self.assertIsNotNone(payment_type_id)
 
-        # Removes customer and payment_type data from db
-        flush_table("Customer")
-        flush_table("PaymentType")
-
-
     def test_add_product_to_order(self):
         # Insert customer and get ID
         customer_id = save_to_db("Customer", self.customer_values)
 
         # Insert order and get ID
-        order_values = [None, self.faker.date(), customer_id, None]
 
-        save_to_db("CustomerOrder", order_values)
+        order_values_1 = [None, '2015-01-27', customer_id, '2015-02-27']
+        save_to_db("CustomerOrder", order_values_1)
 
-        order_id = get_active_customer_order(customer_id)
+        order = get_active_customer_order(customer_id)
+        self.assertEqual(None, order)
+
+        order_values_2 = [None, '2007-08-06', customer_id, None]
+        order_values_3 = [None, '2016-01-27', customer_id, None]
+        save_to_db("CustomerOrder", order_values_2)
+        save_to_db("CustomerOrder", order_values_3)
+
+        order = get_active_customer_order(customer_id)
+        self.assertTrue('2016-01-27' in order)
 
         # Insert products and get IDs
         first_product_values = [self.faker.random_int(), self.faker.word(), self.faker.text(), 1, 1]
@@ -83,23 +85,16 @@ class TestDatabaseInteractions(unittest.TestCase):
         first_chosen_product_id = product_list[first_chosen_product_from_menu-1][chosen_product_pk_index]
         second_chosen_product_id = product_list[second_chosen_product_from_menu-1][chosen_product_pk_index]
 
-        first_productorder_id = save_to_db("ProductOrder", [order_id, first_chosen_product_id])
-        second_productorder_id = save_to_db("ProductOrder", [order_id, first_chosen_product_id])
-        third_productorder_id = save_to_db("ProductOrder", [order_id, second_chosen_product_id])
+        first_productorder = save_to_db("ProductOrder", [order[0], first_chosen_product_id])
+        second_productorder_id = save_to_db("ProductOrder", [order[0], first_chosen_product_id])
+        third_productorder_id = save_to_db("ProductOrder", [order[0], second_chosen_product_id])
 
         self.assertEqual(first_product_id, first_chosen_product_id)
         # self.assertEqual(second_product_id, second_chosen_product_id)
-        self.assertIsNotNone(order_id)
-        self.assertIsNotNone(first_productorder_id)
+        self.assertIsNotNone(order)
+        self.assertIsNotNone(first_productorder)
         self.assertIsNotNone(second_productorder_id)
         self.assertIsNotNone(third_productorder_id)
-
-        flush_table("Customer")
-        flush_table("Product")
-        flush_table("PaymentType")
-        flush_table("CustomerOrder")
-        flush_table("ProductOrder")
-
 
     def test_complete_order(self):
         # Insert customer and get ID
@@ -138,13 +133,6 @@ class TestDatabaseInteractions(unittest.TestCase):
         self.assertIsNotNone(order_tuple[1])
         self.assertIsNotNone(order_tuple[4])
 
-        flush_table("Customer")
-        flush_table("Product")
-        flush_table("PaymentType")
-        flush_table("CustomerOrder")
-        flush_table("ProductOrder")
-
-
     def test_get_all_from_customer_and_set_active_customer(self):
         # Insert customers
         customer_id = save_to_db("Customer", self.customer_values)
@@ -166,12 +154,6 @@ class TestDatabaseInteractions(unittest.TestCase):
         self.assertIsNotNone(active_customer_id)
         self.assertEqual(customer_id, active_customer_id)
 
-        flush_table("Customer")
-        flush_table("Product")
-        flush_table("PaymentType")
-        flush_table("CustomerOrder")
-        flush_table("ProductOrder")
-
     def test_get_order_total(self):
          # Insert customer and get ID
         customer_id = save_to_db("Customer", self.customer_values)
@@ -187,7 +169,7 @@ class TestDatabaseInteractions(unittest.TestCase):
 
         save_to_db("CustomerOrder", order_values)
 
-        order_id = get_active_customer_order(customer_id)
+        order_id = get_active_customer_order(customer_id)[0]
 
         # Insert products and get IDs
         product_one_price = self.faker.random_int()
