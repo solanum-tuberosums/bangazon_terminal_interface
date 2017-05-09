@@ -91,7 +91,7 @@ def run_ordering_system(menu_command=None):
                 order_id = order_tuple[0]
             except:
                 order_values = [None, datetime.datetime.now(), active_customer_id, None]
-                order_id = save_to_db("CustomerOrder", order_vales)
+                order_id = save_to_db("CustomerOrder", order_values)
             # Print list of all products
             product_list = get_all_from_table("Product")
             exit_command = (9999,9999,"Done Adding Products")
@@ -118,7 +118,7 @@ def run_ordering_system(menu_command=None):
         if active_customer_id:
             order_tuple = get_active_customer_order(active_customer_id)
             order_id = order_tuple[0]
-            order_total = get_order_total(order_id)
+            order_total = int(get_order_total(order_id))
             # Check order total
             if order_total > 0:
                 print("Your order total is ${}. Ready to purchase?".format(order_total))
@@ -128,7 +128,7 @@ def run_ordering_system(menu_command=None):
                     payment_type_list = get_all_from_table("PaymentType", customer_id=active_customer_id)
                     print("Choose a payment option")
                     for counter, payment in enumerate(payment_type_list):
-                        print(str(counter+1)+". ", payment_type_list[1], payment_type_list[2])
+                        print(str(counter+1)+". ", payment[1], payment[2])
                     chosen_payment_type = int(input())
                     chosen_payment_type_id = payment_type_list[chosen_payment_type-1][0]
                     # Update order with chosen payment type id and date paid

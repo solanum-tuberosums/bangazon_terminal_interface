@@ -5,7 +5,7 @@ def get_all_from_table(table_name=None, db='db.sqlite3', customer_id=None):
     conn = sqlite3.connect(db)
     c = conn.cursor()
     if customer_id:
-        command = 'SELECT * FROM paymenttype pt, where pt.customer_id = {}'.format(str(customer_id))
+        command = 'SELECT * FROM paymenttype where paymenttype.customer_id = {}'.format(str(customer_id))
         selection = [row for row in c.execute(command)]
         conn.commit()
         conn.close()
