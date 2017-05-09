@@ -80,7 +80,7 @@ def run_ordering_system(menu_command=None):
             print("Your payment type was saved")
             run_ordering_system()
         else: 
-            input("Please select an active customer or create a new customer. Press any key to return to main menu.\n")
+            input("Please select an active customer or create a new customer. Press enter to return to main menu.\n")
             run_ordering_system()
 
     if menu_command == 4:
@@ -108,7 +108,7 @@ def run_ordering_system(menu_command=None):
                 save_to_db("ProductOrder", (product_id, order_id))
                 run_ordering_system(menu_command=4)
         else: 
-            print("Please select an active customer or create a new customer. Press any key to return to main menu")
+            print("Please select an active customer or create a new customer. Press enter to return to main menu")
             input()
             run_ordering_system()  
 
@@ -126,7 +126,8 @@ def run_ordering_system(menu_command=None):
             order_total = get_order_total(order_id)
             # Check order total
             if order_total != None:
-                print("Your order total is ${}. Ready to purchase?".format(order_total))
+                rounded_order_total = round(order_total, 2)
+                print("Your order total is ${}. Ready to purchase?".format(rounded_order_total))
                 response = input("Y/N\t")
                 if response.lower() == "y":
                     # Get payment types for customer
@@ -139,7 +140,7 @@ def run_ordering_system(menu_command=None):
                         chosen_payment_type_id = payment_type_list[chosen_payment_type-1][0]
                         # Update order with chosen payment type id and date paid
                         complete_order(order_id, chosen_payment_type_id)
-                        input("Your order is complete! Press any key to return to main menu.\n")
+                        input("Your order is complete! Press enter to return to main menu.\n")
                         run_ordering_system()
                     else:
                         input("Please create a payment type for the customer")
@@ -152,11 +153,11 @@ def run_ordering_system(menu_command=None):
                     run_ordering_system(menu_command=5)
 
             else:
-                input("Please add some products to your order first. Press any key to return to main menu.\n")
+                input("Please add some products to your order first. Press enter to return to main menu.\n")
                 run_ordering_system()
 
         else: 
-            input("Please select an active customer or create a new customer. Press any key to return to main menu.\n")
+            input("Please select an active customer or create a new customer. Press enter to return to main menu.\n")
             run_ordering_system()
 
     if menu_command == 6:
@@ -217,9 +218,9 @@ def run_ordering_system(menu_command=None):
 
         # Print totals in their perfectly sized columns
         print("Totals:           "+str(total_orders)+(space*total_orders_spaces)+str(total_customers)+(space*total_customers_spaces)+"$"+str(total_revenue))
-        input("Press any key to return to the main menu.\n")
+        input("Press enter to return to the main menu.\n")
         run_ordering_system()
-        
+            
     if menu_command == 7:
         print("Cya, Sucka! Thanks for visiting Bangazon.")
         pass
