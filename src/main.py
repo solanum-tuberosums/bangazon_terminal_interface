@@ -1,5 +1,6 @@
 from methods import *
 import datetime
+import os.path
 
 active_customer_id = None
 total_revenue = int()
@@ -234,4 +235,8 @@ def run_ordering_system(menu_command=None):
 
 
 if __name__ == "__main__":
+    if os.path.isfile('db.sqlite3'):
+        pass
+    else:
+        build_db()
     run_ordering_system()
