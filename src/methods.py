@@ -61,9 +61,32 @@ def get_all_from_table(table_name, customer_id=None):
         conn.close()
         return selection
 
-
 def complete_order(order_id, pmt_type_id):
-    return (1, 3, '2016-01-21', 5, '2017-01-01')
+    """
+    This method changes the state of an order to completed by updating two fields in the
+    appropriate row of the CustomerOrder table. It updates the payment_type_id to correspond
+    to the payment used by the customer, and it updates the date_paid to the current date and time.
+
+    ---Arguments---
+    order_id(integer):      The SQL id of the order we wish to change. 
+
+    pmt_type_id(integer):   The SQL id of the payment type that the customer used.
+
+    ---Return Value---
+    NONE
+
+    Author: Zak Spence
+    """
+    with sqlite3.connect('db.sqlite3') as conn:
+        c = conn.cursor()
+
+        sql =   ''' UPDATE CustomerOrder
+                    SET
+                    payment_type_id = {1}, date_paid = datetime('now')
+                    WHERE id == {0}
+                '''.format(order_id, pmt_type_id)
+        c.execute(sql)
+        conn.commit()
 
 
 def get_active_customer_order(customer_id):
@@ -188,5 +211,28 @@ def get_order_total(order_id):
 
 
 def get_popular_products():
-    return [('AA Batteries', 100, 20, 990.90),('Diapers', 50, 10, 640.95), ('Case Crackling Cola', 40, 30, 270.96)]
+    """
+    This method will return the data we need to populate our table that displays the popular products
 
+    ---Arguments---
+    None
+
+    ---Return Value---
+    selection(list):        A list of tuples that contain our data for the popularity table.
+
+    Author: Blaise Roberts, Jessica Younker
+    """
+    with sqlite3.connect('db.sqlite3') as conn:
+        c = conn.cursor()
+        sql =   ''' SELECT p.title as Product, COUNT(po.id) as NumTimesOrdered, 
+                        COUNT( distinct o.customer_id) NumberOfCustomersOrdered, 
+                        (p.price * COUNT(po.id)) as Revenue
+                    FROM customerorder o, productorder po, product p
+                    WHERE o.id = po.order_id
+                    AND p.id = po.product_id
+                    AND o.date_paid != 'None'
+                    GROUP BY po.product_id
+                    ORDER BY NumTimesOrdered desc
+                    limit 5'''
+        c.execute(sql)
+        return c.fetchall()
