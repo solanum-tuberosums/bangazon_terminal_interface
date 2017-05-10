@@ -31,7 +31,7 @@ def complete_order(order_id=None, pmt_type_id=None, db='db.sqlite3'):
         update_order = '''
                      UPDATE CustomerOrder
                      SET
-                     payment_type_id = {1}, date_paid = strftime('%Y', '%m', '%d')
+                     payment_type_id = {1}, date_paid = datetime('now')
                      WHERE id == {0}
                   '''.format(order_id, pmt_type_id)
         c.execute(update_order)

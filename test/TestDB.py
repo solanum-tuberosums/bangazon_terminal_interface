@@ -64,7 +64,6 @@ class TestDatabaseInteractions(unittest.TestCase):
         save_to_db("CustomerOrder", order_values_3)
 
         order = get_active_customer_order(customer_id)
-        print(order)
         self.assertTrue('2016-01-27' in order)
 
         # Insert products and get IDs
@@ -130,7 +129,6 @@ class TestDatabaseInteractions(unittest.TestCase):
         complete_order(order_id, payment_type_id)
 
         order_tuple = get_active_customer_order(customer_id)
-        print(order_tuple)
 
         # Checking the payment_type_id and the date_paid
         self.assertIsNotNone(order_tuple[1])
