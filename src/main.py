@@ -110,7 +110,10 @@ def run_ordering_system(menu_command=None):
                 product_list.append(exit_command)
                 for counter, product in enumerate(product_list):
                     print(str(counter+1)+". ", product[2])
-                chosen_product_from_menu = int(input(' > '))
+                try:
+                    chosen_product_from_menu = int(input(' > '))
+                except:
+                    chosen_product_from_menu = 0
 
                 if chosen_product_from_menu <= 0:
                     print('\n --- PRODUCT DOES NOT EXIST ---\n')
