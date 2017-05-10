@@ -302,7 +302,7 @@ def build_db():
                                                 REFERENCES Customer(id) 
                                                 ON DELETE CASCADE)
                             '''
-        sql_customer_order = '''CREATE TABLE CustomerOrder(
+        sql_customer_order ='''CREATE TABLE CustomerOrder(
                                 id              INTEGER NOT NULL PRIMARY KEY 
                                                     AUTOINCREMENT,
                                 payment_type_id INTEGER,
@@ -315,7 +315,8 @@ def build_db():
                                                 ON DELETE CASCADE)
                             '''
         sql_product_order = ''' CREATE TABLE ProductOrder(
-                                id              INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+                                id              INTEGER NOT NULL PRIMARY KEY 
+                                                    AUTOINCREMENT,
                                 product_id      INTEGER NOT NULL,
                                 order_id        INTEGER NOT NULL,
                                 FOREIGN KEY     (product_id) 
@@ -343,12 +344,12 @@ def build_db():
                                             'Nashville', 'TN', '37201', 
                                             '615-888-5555', '05-09-2017')
                             '''
-        product_type_one_sql ='''   INSERT INTO ProductType 
+        product_type_one_sql =  ''' INSERT INTO ProductType 
                                         VALUES(NULL, 'Round Toys')
-                            '''
-        product_type_two_sql ='''   INSERT INTO ProductType 
+                                '''
+        product_type_two_sql =  ''' INSERT INTO ProductType 
                                         VALUES(NULL, 'Angular Toys')
-                            '''
+                                '''
         product_one_sql =   '''     INSERT INTO Product
                                         VALUES (NULL, 19.99, "Red Ball", 
                                             "Bouncy", 1, 1)
@@ -414,4 +415,3 @@ def build_db():
             conn.commit()
         except sqlite3.OperationalError:
             pass
-
