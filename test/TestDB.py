@@ -110,7 +110,7 @@ class TestDatabaseInteractions(unittest.TestCase):
 
         save_to_db("CustomerOrder", order_values)
 
-        order_id = get_active_customer_order(customer_id)
+        order_id = get_active_customer_order(customer_id)[0]
 
         # Insert products and get IDs
         first_product_values = [self.faker.random_int(), self.faker.word(), self.faker.text(), 1, 1]
@@ -126,11 +126,14 @@ class TestDatabaseInteractions(unittest.TestCase):
         save_to_db("ProductOrder", [second_product_id, order_id])
 
         ####### Important method, to update selected order ######
-        order_tuple = complete_order(order_id, payment_type_id)
+        complete_order(order_id, payment_type_id)
+
+        order_tuple = get_active_customer_order(customer_id)
 
         # Checking the payment_type_id and the date_paid
         self.assertIsNotNone(order_tuple[1])
         self.assertIsNotNone(order_tuple[4])
+
     def test_get_all_from_customer_and_set_active_customer(self):
         # Insert customers
         customer_id = save_to_db("Customer", self.customer_values)
@@ -151,15 +154,6 @@ class TestDatabaseInteractions(unittest.TestCase):
         #   that the customer id we inserted is equal to our active cusotmer id
         self.assertIsNotNone(active_customer_id)
         self.assertEqual(customer_id, active_customer_id)
-
-
-
-        flush_table("Customer")
-        flush_table("Product")
-        flush_table("PaymentType")
-        flush_table("CustomerOrder")
-        flush_table("ProductOrder")
-
 
     def test_get_order_total(self):
          # Insert customer and get ID
