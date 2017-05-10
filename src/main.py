@@ -53,8 +53,14 @@ def run_ordering_system(menu_command=None):
             print("5. Complete an order")
             print("6. See product popularity")
             print("7. Leave Bangazon!")
-            menu_command = int(input("Please select the number that corresponds to your menu option\n > "))
-
+            try:
+                menu_command = int(input("Please select the number that corresponds to your menu option\n > "))
+                if menu_command <= 0:
+                    print("\n --- MUST ENTER A POSITIVE INTEGER ---\n")
+                    menu_command = None
+            except:
+                print("\n --- MUST ENTER AN INTEGER ---\n")
+                menu_command = None
         if menu_command == 1:
             print("Enter customer first name")
             customer_first_name = input(' > ')
