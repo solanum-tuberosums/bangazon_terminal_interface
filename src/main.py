@@ -64,8 +64,8 @@ def run_ordering_system(menu_command=None):
 
             # Added this because if user entered 0:
             #   the last index of the list would be set as the active customer
-            if chosen_customer_from_menu == 0:
-                print('\n --- CUSTOMER DOES NOT EXIST')
+            if chosen_customer_from_menu <= 0:
+                print('\n --- CUSTOMER DOES NOT EXIST ---\n')
                 # menu_command = 2
             else:
 
@@ -110,21 +110,23 @@ def run_ordering_system(menu_command=None):
                 product_list.append(exit_command)
                 for counter, product in enumerate(product_list):
                     print(str(counter+1)+". ", product[2])
-                chosen_product_from_menu = int(input())
-                if chosen_customer_from_menu == 0:
+                chosen_product_from_menu = int(input(' > '))
+
+                if chosen_product_from_menu <= 0:
                     print('\n --- PRODUCT DOES NOT EXIST ---\n')
-                # Check to see if they exited program
-                if len(product_list) == chosen_product_from_menu:
-                    menu_command = None
-                # Add product to order and reopen product menu
                 else:
-                    try:
-                        product_id = product_list[chosen_product_from_menu-1][0]
-                        save_to_db("ProductOrder", (product_id, order_id))
-                        menu_command = 4
-                    except:
-                        print("\n --- PRODUCT DOES NOT EXIST ---\n")
-                        # menu_command = None
+                    # Check to see if they exited program
+                    if len(product_list) == chosen_product_from_menu:
+                        menu_command = None
+                    # Add product to order and reopen product menu
+                    else:
+                        try:
+                            product_id = product_list[chosen_product_from_menu-1][0]
+                            save_to_db("ProductOrder", (product_id, order_id))
+                            menu_command = 4
+                        except:
+                            print("\n --- PRODUCT DOES NOT EXIST ---\n")
+                            # menu_command = None
             else:
                 print("\n --- PLEASE SELECT AN ACTIVE CUSTOMER OR CREATE A NEW CUSTOMER \n --- Press any key to return to main menu.\n")
                 input()
@@ -154,16 +156,23 @@ def run_ordering_system(menu_command=None):
                             print("Choose a payment option")
                             for counter, payment in enumerate(payment_type_list):
                                 print(str(counter+1)+". ", payment[1], payment[2])
-                            chosen_payment_type = int(input())
-                            chosen_payment_type_id = payment_type_list[chosen_payment_type-1][0]
-                            # Update order with chosen payment type id and date paid
-                            complete_order(order_id, chosen_payment_type_id)
-                            input("Your order is complete! Press enter to return to main menu.\n")
+                            try:
+                                chosen_payment_type = int(input())
+                                chosen_payment_type_id = payment_type_list[chosen_payment_type-1][0]
+                                # Update order with chosen payment type id and date paid
+                                complete_order(order_id, chosen_payment_type_id)
+                                input("Your order is complete! Press enter to return to main menu.\n > ")
+                                menu_command = None
+                            except:
+                                print("\n --- MUST ENTER A SHOWN INTEGER ---\n")
 
-                            menu_command = None
                         else:
-                            input("Customer has no payment types. Press enter to create a payment type for customer.")
-                            menu_command = 3
+                            temp_command = input("Customer has no payment types. Would you like to create a payment type? (Y/N)\n > ")
+                            if temp_command.lower() == 'y' or temp_command.lower() == 'yes':
+                                print('\nCREATING PAYMENT TYPE')
+                                menu_command = 3
+                            else:
+                                menu_command = None
 
                     elif response.lower() == "n":
                         menu_command = None
