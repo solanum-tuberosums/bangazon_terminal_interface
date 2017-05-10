@@ -23,15 +23,37 @@ def get_all_from_table(table_name, customer_id=None):
         conn.close()
         return selection
 
-
 def complete_order(order_id, pmt_type_id):
-    return (1, 3, '2016-01-21', 5, '2017-01-01')
+    '''
+    This method changes the state of an order to completed by updating two fields in the
+    appropriate row of the CustomerOrder table. It updates the payment_type_id to correspond
+    to the payment used by the customer, and it updates the date_paid to the current date and time.
+
+    ---Arguments---
+    order_id(int):      The SQL id of the order we wish to change. 
+
+    pmt_type_id(int):   The SQL id of the payment type that the customer used.
+
+    ---Return Value---
+    No return value
+    '''
+    with sqlite3.connect('db.sqlite3') as conn:
+        c = conn.cursor()
+
+        update_order = '''
+                     UPDATE CustomerOrder
+                     SET
+                     payment_type_id = {1}, date_paid = datetime('now')
+                     WHERE id == {0}
+                  '''.format(order_id, pmt_type_id)
+        c.execute(update_order)
+        conn.commit()
 
 def get_active_customer_order(customer_id):
     db='db.sqlite3'
     conn = sqlite3.connect(db)
     c = conn.cursor()
-    command = '''SELECT o.id, o.customer_id, o.date_begun, o.date_paid
+    command = '''SELECT o.id, o.payment_type_id, o.date_begun, o.customer_id, o.date_paid
                  FROM CustomerOrder o
                  INNER JOIN (
                     SELECT customer_id, max(date_begun) as MaxDate
