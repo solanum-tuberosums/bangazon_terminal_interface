@@ -184,6 +184,7 @@ def run_ordering_system(menu_command=None):
                 
                 # Convert Tuple to list and truncate longer values in each column
                 product = list(product)
+                product[3] = round(product[3], 2)
                 if len(str(product[0]))>14:
                     product[0] = str(product[0])[:14]+"..." 
                 if len(str(product[1]))>7:

@@ -82,6 +82,17 @@ def get_order_total(order_id):
     return order_total
 
 def get_popular_products():
+    """
+    This method will return the data we need to populate our table that displays the popular products
+
+    ---Arguments---
+    None
+
+    ---Return Value---
+    selection(list):        A list of tuples that contain our data for the popularity table.
+
+    Author: Blaise Roberts
+    """
         with sqlite3.connect('db.sqlite3') as conn:
             c = conn.cursor()
             c.execute("""SELECT p.title as Product, COUNT(po.id) as NumTimesOrdered, COUNT( distinct o.customer_id) NumberOfCustomersOrdered, (p.price * COUNT(po.id)) as Revenue
