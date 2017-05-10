@@ -91,7 +91,7 @@ def get_popular_products():
     ---Return Value---
     selection(list):        A list of tuples that contain our data for the popularity table.
 
-    Author: Blaise Roberts
+    Author: Blaise Roberts, Jessica Younker
     """
     with sqlite3.connect('db.sqlite3') as conn:
         c = conn.cursor()
