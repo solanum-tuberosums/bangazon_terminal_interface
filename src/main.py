@@ -61,7 +61,7 @@ def run_ordering_system(menu_command=None):
             except:
                 print("\n --- MUST ENTER A POSITIVE INTEGER ---\n")
                 menu_command = None
-        if menu_command == 1:
+        elif menu_command == 1:
             print("Enter customer first name")
             customer_first_name = input(' > ')
             print("Enter customer middle initial")
@@ -87,7 +87,7 @@ def run_ordering_system(menu_command=None):
             print("\n --- NEW CUSTOMER ADDED ---\n")
             menu_command = None
 
-        if menu_command == 2:
+        elif menu_command == 2:
             print("\nWhich customer will be active?")
             customer_list = get_all_from_table("Customer")
 
@@ -111,9 +111,9 @@ def run_ordering_system(menu_command=None):
                     print("\n *** NEW ACTIVE CUSTOMER: ", customer_list[chosen_customer_from_menu-1][1], customer_list[chosen_customer_from_menu-1][3] + " ***\n")
                     menu_command = None
                 except:
-                    print("\n -- CUSTOMER DOES NOT EXIST ---\n")
+                    print("\n --- CUSTOMER DOES NOT EXIST ---\n")
 
-        if menu_command == 3:
+        elif menu_command == 3:
             if active_customer_id:
                 print("Name this payment account")
                 account_label = input(' > ')
@@ -135,7 +135,7 @@ def run_ordering_system(menu_command=None):
                 input("Please select an active customer or create a new customer. Press enter to return to main menu.\n > ")
                 menu_command = None
 
-        if menu_command == 4:
+        elif menu_command == 4:
             # Check active_customer and get/create order
             if active_customer_id:
                 try:
@@ -146,7 +146,7 @@ def run_ordering_system(menu_command=None):
                     order_id = save_to_db("CustomerOrder", order_values)
                 # Print list of all products
                 product_list = get_all_from_table("Product")
-                exit_command = (9999,9999,"DONE ADDING PRODUCTS")
+                exit_command = (9999,9999,"\n *** DONE ADDING PRODUCTS ***\n")
                 product_list.append(exit_command)
                 for counter, product in enumerate(product_list):
                     print(str(counter+1)+". ", product[2])
@@ -177,7 +177,7 @@ def run_ordering_system(menu_command=None):
                 menu_command = None
 
 
-        if menu_command == 5:
+        elif menu_command == 5:
             # Check active_customer and get order
             if active_customer_id:
                 try:
@@ -232,7 +232,7 @@ def run_ordering_system(menu_command=None):
                 input("Please select an active customer or create a new customer. Press enter to return to main menu.\n")
                 menu_command = None
 
-        if menu_command == 6:
+        elif menu_command == 6:
             # Get list of tuples for the popular products
             popular_product_list = get_popular_products()
 
@@ -304,6 +304,9 @@ def run_ordering_system(menu_command=None):
             else:
                 input("Nothing has been purchased yet, there's no contest broseph.\nPress enter to return to the main menu\n")
                 menu_command = None
+        else:
+            print('\n --- MUST ENTER A VALID MENU OPTION ---\n')
+            menu_command = None
 
     if menu_command == 7:
         print("Cya, Sucka! Thanks for visiting Bangazon.")
