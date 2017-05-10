@@ -121,7 +121,7 @@ def get_popular_products():
                         FROM customerorder o, productorder po, product p
                         WHERE o.id = po.order_id
                         AND p.id = po.product_id
-                        AND o.date_paid = NOT NULL
+                        AND o.date_paid != 'None'
                         GROUP BY po.product_id
                         ORDER BY NumTimesOrdered desc
                         limit 5""")
