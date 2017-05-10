@@ -14,7 +14,9 @@
 """
 
 import datetime
+import os.path
 from methods import *
+
 
 active_customer_id = None
 total_revenue = int()
@@ -146,7 +148,7 @@ def run_ordering_system(menu_command=None):
                     order_id = save_to_db("CustomerOrder", order_values)
                 # Print list of all products
                 product_list = get_all_from_table("Product")
-                exit_command = (9999,9999,"\n *** DONE ADDING PRODUCTS ***\n")
+                exit_command = (9999,9999," *** DONE ADDING PRODUCTS ***")
                 product_list.append(exit_command)
                 for counter, product in enumerate(product_list):
                     print(str(counter+1)+". ", product[2])
@@ -315,6 +317,9 @@ def run_ordering_system(menu_command=None):
 
 
 if __name__ == "__main__":
+    if os.path.isfile('db.sqlite3'):
+        pass
+    else:
+        build_db()
     run_ordering_system()
-
 
