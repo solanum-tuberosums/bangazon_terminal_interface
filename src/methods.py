@@ -25,7 +25,7 @@ def get_all_from_table(table_name, customer_id=None):
     table_name(string):     This argument represents the database table from 
                             which we pull the data with the SELECT * statement.
 
-    customer_id(integer):    This argument represents the id of the customer 
+    customer_id(integer):   This argument represents the id of the customer 
                             whose data we want to pull from the database. It 
                             can be null.
 
@@ -93,7 +93,7 @@ def get_active_customer_order(customer_id):
     This method returns the most recently created order for a customer. 
 
     ---Arguments---
-    customer_id(integer):    This argument represents the id of the customer 
+    customer_id(integer):   This argument represents the id of the customer 
                             whose data we want to pull from the database.
 
     ---Return Value---
@@ -180,8 +180,8 @@ def get_order_total(order_id):
     This method returns the total price for a particular order.
 
     ---Arguments---
-    order_id(integer):  This represents the primary key of the order whose 
-                        prices we sum.
+    order_id(integer):      This represents the primary key of the order whose 
+                            prices we sum.
 
     ---Return Value---
     order_total(integer):   The total price of an order
