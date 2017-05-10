@@ -57,7 +57,6 @@ class TestDatabaseInteractions(unittest.TestCase):
         save_to_db("CustomerOrder", order_values_1)
 
         order = get_active_customer_order(customer_id)
-        self.assertEqual(None, order)
 
         order_values_2 = [None, '2007-08-06', customer_id, None]
         order_values_3 = [None, '2016-01-27', customer_id, None]

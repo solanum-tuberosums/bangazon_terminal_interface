@@ -1,18 +1,28 @@
 import sqlite3
 
-def get_all_from_table(table_name=None, db='db.sqlite3'):
+
+def get_all_from_table(table_name, customer_id=None):
+    db = 'db.sqlite3'
     conn = sqlite3.connect(db)
     c = conn.cursor()
-    ordering = ' '
-    if table_name.lower() == 'customer':
-        ordering = 'last_name'
-    elif table_name.lower() == 'product':
-        ordering = 'id'
-    command = 'SELECT * FROM {} ORDER BY {}'.format(table_name, ordering)
-    selection = [row for row in c.execute(command)]
-    conn.commit()
-    conn.close()
-    return selection
+    if customer_id:
+        command = 'SELECT * FROM paymenttype where paymenttype.customer_id = {}'.format(str(customer_id))
+        selection = [row for row in c.execute(command)]
+        conn.commit()
+        conn.close()
+        return selection
+    else:
+        ordering = ' '
+        if table_name.lower() == 'customer':
+            ordering = 'last_name'
+        elif table_name.lower() == 'product':
+            ordering = 'id'
+        command = 'SELECT * FROM {} ORDER BY {}'.format(table_name, ordering)
+        selection = [row for row in c.execute(command)]
+        conn.commit()
+        conn.close()
+        return selection
+
 
 def complete_order(order_id=None, pmt_type_id=None, db='db.sqlite3'):
 
@@ -27,32 +37,24 @@ def complete_order(order_id=None, pmt_type_id=None, db='db.sqlite3'):
         c.execute(update_order)
         conn.commit()
 
-
-def get_active_customer_order(customer_id=None, db='db.sqlite3'):
-
-    with sqlite3.connect(db) as conn:
-        c = conn.cursor()
-        command = '''SELECT o.id, o.customer_id, o.date_begun, o.date_paid
-                     FROM CustomerOrder o
-                     INNER JOIN (
-                        SELECT customer_id, max(date_begun) as MaxDate
-                        FROM CustomerOrder
-                        WHERE customer_id == {0}
-                     ) mco
-                     ON o.customer_id == mco.customer_id
-                     AND o.date_begun == mco.MaxDate
-                     '''.format(customer_id)
-        selection = [row for row in c.execute(command)]
-        conn.commit()
-
-        if selection[0][3] != 'None':
-
-            print('Customer {} has no active orders. Please create a new order for the customer if you wish to make any changes.'.format(customer_id))
-            print('Last order was completed on {}'.format(selection[0][3]))
-            return None
-
-        else:
-            return selection[0]
+def get_active_customer_order(customer_id):
+    db='db.sqlite3'
+    conn = sqlite3.connect(db)
+    c = conn.cursor()
+    command = '''SELECT o.id, o.customer_id, o.date_begun, o.date_paid
+                 FROM CustomerOrder o
+                 INNER JOIN (
+                    SELECT customer_id, max(date_begun) as MaxDate
+                    FROM CustomerOrder
+                    WHERE customer_id == {0}
+                 ) mco
+                 ON o.customer_id == mco.customer_id
+                 AND o.date_begun == mco.MaxDate
+                 '''.format(customer_id)
+    selection = [row for row in c.execute(command)]
+    conn.commit()
+    conn.close()
+    return selection[0]
 
 def flush_table(table_name=None, db='db.sqlite3'):
     conn = sqlite3.connect(db)
@@ -91,3 +93,4 @@ def get_order_total(order_id):
 
 def get_popular_products():
     return [('AA Batteries', 100, 20, 990.90),('Diapers', 50, 10, 640.95), ('Case Crackling Cola', 40, 30, 270.96)]
+
