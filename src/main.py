@@ -1,3 +1,17 @@
+
+"""
+--- Description ---
+    Main Bangazon Command Line Interface module that contains all of the methods' invocations/calls
+    and the logic for managing the user's interaction with this program.
+--- Global Variables ---
+    * active_customer_id:     used to reference the current active customer in any possible scope
+    * total_revenue:          used in the popular_products feature (menu option 6) to avoid looping
+                                through same set of data twice
+    * total_customers:        used in the popular_products feature (menu option 6) to avoid looping
+                                through same set of data twice
+    * total_revenue:          used in the popular_products feature (menu option 6) to avoid looping
+                                through same set of data twice
+"""
 import datetime
 from methods import *
 
@@ -7,6 +21,19 @@ total_orders = int()
 total_customers = int()
 
 def run_ordering_system(menu_command=None):
+    """
+    This method is invoked to start and manage the lifecycle of this command line interface.
+
+    ---Arguments---
+    menu_command(int/None):     This argument represents the numbered menu choice made by the user.
+                                It is defaulted to None so that the menu options are immediately
+                                printed.
+
+    ---Return Value---
+     None
+
+    Author: Blaise Roberts, Jessica Younker
+    """
     global active_customer_id
     global total_orders
     global total_customers
