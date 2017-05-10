@@ -12,6 +12,7 @@
     * total_revenue:          used in the popular_products feature (menu option 6) to avoid looping
                                 through same set of data twice
 """
+
 import datetime
 from methods import *
 
