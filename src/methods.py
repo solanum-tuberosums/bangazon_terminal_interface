@@ -19,16 +19,16 @@ import sqlite3
 def get_all_from_table(table_name, customer_id=None):
     """
     This method gets all data from one of three tables in the sql database, 
-    depending on the table_name passed in as an argument: paymenttype, customer,
-    or product.
+    depending on the table_name passed in as an argument: paymenttype, 
+    customer, or product.
 
     ---Arguments---
     table_name(string):     This argument represents the database table from 
                             which we pull the data with the SELECT * statement.
 
     customer_id(integer):    This argument represents the id of the customer 
-                            whose data we want to pull from the database. It can
-                            be null.
+                            whose data we want to pull from the database. It 
+                            can be null.
 
     ---Return Value---
     selection(list):        A list of tuples that contains all values from the 
@@ -63,14 +63,16 @@ def get_all_from_table(table_name, customer_id=None):
 
 def complete_order(order_id, pmt_type_id):
     """
-    This method changes the state of an order to completed by updating two fields in the
-    appropriate row of the CustomerOrder table. It updates the payment_type_id to correspond
-    to the payment used by the customer, and it updates the date_paid to the current date and time.
+    This method changes the state of an order to completed by updating two 
+    fields in the appropriate row of the CustomerOrder table. It updates the 
+    payment_type_id to correspond to the payment used by the customer, and it 
+    updates the date_paid to the current date and time.
 
     ---Arguments---
     order_id(integer):      The SQL id of the order we wish to change. 
 
-    pmt_type_id(integer):   The SQL id of the payment type that the customer used.
+    pmt_type_id(integer):   The SQL id of the payment type that the customer 
+                            used.
 
     ---Return Value---
     NONE
@@ -193,6 +195,7 @@ def get_order_total(order_id):
 
     Author: Jeremy Bakker, Will Sims
     """
+
     conn = sqlite3.connect('db.sqlite3')
     c = conn.cursor()
     sql =   ''' SELECT SUM(p.price) 
@@ -212,27 +215,31 @@ def get_order_total(order_id):
 
 def get_popular_products():
     """
-    This method will return the data we need to populate our table that displays the popular products
+    This method will return the data we need to populate our table that 
+    displays the popular products.
 
     ---Arguments---
     None
 
     ---Return Value---
-    selection(list):        A list of tuples that contain our data for the popularity table.
+    selection(list):        A list of tuples that contain our data for the 
+                            popularity table.
 
     Author: Blaise Roberts, Jessica Younker
     """
+
     with sqlite3.connect('db.sqlite3') as conn:
         c = conn.cursor()
         sql =   ''' SELECT p.title as Product, COUNT(po.id) as NumTimesOrdered, 
-                        COUNT( distinct o.customer_id) NumberOfCustomersOrdered, 
-                        (p.price * COUNT(po.id)) as Revenue
+                        COUNT(distinct o.customer_id) 
+                        NumberOfCustomersOrdered, (p.price * COUNT(po.id)) 
+                        as Revenue
                     FROM customerorder o, productorder po, product p
                     WHERE o.id = po.order_id
                     AND p.id = po.product_id
                     AND o.date_paid != 'None'
                     GROUP BY po.product_id
-                    ORDER BY NumTimesOrdered desc
-                    limit 5'''
+                    ORDER BY NumTimesOrdered desc limit 5
+                '''
         c.execute(sql)
         return c.fetchall()
