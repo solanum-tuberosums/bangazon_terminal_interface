@@ -93,14 +93,14 @@ def get_popular_products():
 
     Author: Blaise Roberts
     """
-        with sqlite3.connect('db.sqlite3') as conn:
-            c = conn.cursor()
-            c.execute("""SELECT p.title as Product, COUNT(po.id) as NumTimesOrdered, COUNT( distinct o.customer_id) NumberOfCustomersOrdered, (p.price * COUNT(po.id)) as Revenue
-                            FROM customerorder o, productorder po, product p
-                            WHERE o.id = po.order_id
-                            AND p.id = po.product_id
-                            AND o.date_paid = NOT NULL
-                            GROUP BY po.product_id
-                            ORDER BY NumTimesOrdered desc
-                            limit 5""")
-            return c.fetchall()
+    with sqlite3.connect('db.sqlite3') as conn:
+        c = conn.cursor()
+        c.execute("""SELECT p.title as Product, COUNT(po.id) as NumTimesOrdered, COUNT( distinct o.customer_id) NumberOfCustomersOrdered, (p.price * COUNT(po.id)) as Revenue
+                        FROM customerorder o, productorder po, product p
+                        WHERE o.id = po.order_id
+                        AND p.id = po.product_id
+                        AND o.date_paid = NOT NULL
+                        GROUP BY po.product_id
+                        ORDER BY NumTimesOrdered desc
+                        limit 5""")
+        return c.fetchall()
