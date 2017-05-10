@@ -56,10 +56,10 @@ def run_ordering_system(menu_command=None):
             try:
                 menu_command = int(input("Please select the number that corresponds to your menu option\n > "))
                 if menu_command <= 0:
-                    print("\n --- MUST ENTER A POSITIVE INTEGER ---\n")
-                    menu_command = None
+                    # This type error will cause the except block below to run
+                    raise TypeError
             except:
-                print("\n --- MUST ENTER AN INTEGER ---\n")
+                print("\n --- MUST ENTER A POSITIVE INTEGER ---\n")
                 menu_command = None
         if menu_command == 1:
             print("Enter customer first name")
