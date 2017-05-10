@@ -234,3 +234,174 @@ def get_popular_products():
                 '''
         c.execute(sql)
         return c.fetchall()
+
+def build_db():
+    """
+    This method will build the db.sqlite3 file
+
+    ---Arguments---
+    None
+
+    ---Return Value---
+    None
+
+    Author: Blaise Roberts, Will Sims
+    """
+    with sqlite3.connect('db.sqlite3') as conn:
+        c = conn.cursor()
+        sql_customer =      ''' CREATE TABLE Customer(
+                                id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+                                first_name      VARCHAR(20) NOT NULL,
+                                middle_name     VARCHAR(20),
+                                last_name       VARCHAR(30) NOT NULL,
+                                street_address  VARCHAR(40),
+                                city            VARCHAR(20),
+                                home_state      CHAR(2),
+                                postal_code     CHAR(5),
+                                phone_number    VARCHAR(15),
+                                date_created    DATE NOT NULL)
+                            '''
+        sql_payment_type =  ''' CREATE TABLE PaymentType(
+                                id              INTEGER NOT NULL PRIMARY KEY 
+                                                    AUTOINCREMENT,
+                                account_label   VARCHAR(20),
+                                account_type    VARCHAR(20),
+                                account_number  VARCHAR(20) NOT NULL,
+                                customer_id     INTEGER NOT NULL,
+                                FOREIGN KEY     (customer_id) 
+                                                REFERENCES Customer(id) 
+                                                ON DELETE CASCADE)
+                            '''
+        sql_product_type =  ''' CREATE TABLE ProductType(
+                                id              INTEGER NOT NULL PRIMARY KEY 
+                                                    AUTOINCREMENT,
+                                label           VARCHAR(20))
+                            '''
+        sql_product =       ''' CREATE TABLE Product(
+                                id              INTEGER NOT NULL PRIMARY KEY 
+                                                    AUTOINCREMENT,
+                                price           REAL NOT NULL,
+                                title           VARCHAR(20) NOT NULL,
+                                description     VARCHAR(20),
+                                product_type_id INTEGER NOT NULL,
+                                customer_id     INTEGER NOT NULL,
+                                FOREIGN KEY     (product_type_id)   
+                                                REFERENCES ProductType(id) 
+                                                ON DELETE CASCADE,
+                                FOREIGN KEY     (customer_id)       
+                                                REFERENCES Customer(id) 
+                                                ON DELETE CASCADE)
+                            '''
+        sql_customer_order ='''CREATE TABLE CustomerOrder(
+                                id              INTEGER NOT NULL PRIMARY KEY 
+                                                    AUTOINCREMENT,
+                                payment_type_id INTEGER,
+                                date_begun      DATE NOT NULL,
+                                customer_id     INTEGER NOT NULL,
+                                date_paid       DATE CHECK  (date_begun <= 
+                                                            date_paid),
+                                FOREIGN KEY     (customer_id)       
+                                                REFERENCES Customer(id) 
+                                                ON DELETE CASCADE)
+                            '''
+        sql_product_order = ''' CREATE TABLE ProductOrder(
+                                id              INTEGER NOT NULL PRIMARY KEY 
+                                                    AUTOINCREMENT,
+                                product_id      INTEGER NOT NULL,
+                                order_id        INTEGER NOT NULL,
+                                FOREIGN KEY     (product_id) 
+                                                REFERENCES Product(id) 
+                                                ON DELETE CASCADE,
+                                FOREIGN KEY     (order_id)   
+                                                REFERENCES CustomerOrder(id) 
+                                                ON DELETE CASCADE)
+                            '''
+        customer_one_sql =  ''' INSERT INTO Customer 
+                                    VALUES  (NULL, 'Jeremy', 'Will', 'Smith', 
+                                            '500 Interstate Blvd S.', 
+                                            'Nashville', 'TN', '37201', 
+                                            '615-888-5555', '05-09-2017')
+                            '''
+        customer_two_sql =  ''' INSERT INTO Customer 
+                                    VALUES(NULL, 'Blaise', 'Zak', 'Williams', 
+                                            '500 Interstate Blvd S.', 
+                                            'Nashville', 'TN', '37201', 
+                                            '615-888-5555', '05-09-2017')
+                            '''
+        customer_three_sql =''' INSERT INTO Customer 
+                                    VALUES(NULL, 'Jessica', 'Z.', 'Michaels', 
+                                            '500 Interstate Blvd S.', 
+                                            'Nashville', 'TN', '37201', 
+                                            '615-888-5555', '05-09-2017')
+                            '''
+        product_type_one_sql =  ''' INSERT INTO ProductType 
+                                        VALUES(NULL, 'Round Toys')
+                                '''
+        product_type_two_sql =  ''' INSERT INTO ProductType 
+                                        VALUES(NULL, 'Angular Toys')
+                                '''
+        product_one_sql =   '''     INSERT INTO Product
+                                        VALUES (NULL, 19.99, "Red Ball", 
+                                            "Bouncy", 1, 1)
+                            '''
+        product_two_sql =   '''     INSERT INTO Product
+                                       VALUES (NULL, 29.99, "Ford Truck", 
+                                            "F-150", 1, 2);
+                            '''
+        product_three_sql = '''     INSERT INTO Product
+                                        VALUES (NULL, 9.99, "AA Batteries", 
+                                            "Fully-Charged", 1, 3);
+                            '''
+        product_four_sql =  '''     INSERT INTO Product
+                                        VALUES (NULL, 5.99, "Green Ball", 
+                                            "Squishy", 1, 1);
+                            '''
+        product_five_sql =  '''     INSERT INTO Product
+                                        VALUES (NULL, 2.99, "White Out", 
+                                            "Fix Mistakes", 1, 2);
+                            '''
+        product_six_sql =   '''     INSERT INTO Product
+                                        VALUES (NULL, 999.99, "Diamonds", 
+                                            "Girl's Best Friend", 1, 3);
+                            '''
+        product_seven_sql = '''     INSERT INTO Product
+                                        VALUES (NULL, 39.99, "USB Drive", 
+                                            "1TB", 1, 1);
+                            '''
+        product_eight_sql = '''     INSERT INTO Product
+                                        VALUES (NULL, 7.99, "Blocks", 
+                                            "Hard", 2, 1);
+                            '''
+        product_nine_sql =  '''     INSERT INTO Product
+                                        VALUES (NULL, 15.99, "Water Bottle", 
+                                            "Aluminum", 2, 2);
+                            '''
+        product_ten_sql =   '''     INSERT INTO Product
+                                        VALUES (NULL, 32.99, "Power Strip", 
+                                            "Surge Protector", 2, 3);
+                            '''
+        try:
+            c.execute(sql_customer)
+            c.execute(sql_payment_type)
+            c.execute(sql_product_type)
+            c.execute(sql_product)
+            c.execute(sql_customer_order)
+            c.execute(sql_product_order)
+            c.execute(customer_one_sql)
+            c.execute(customer_two_sql)
+            c.execute(customer_three_sql)
+            c.execute(product_type_one_sql)
+            c.execute(product_type_two_sql)
+            c.execute(product_one_sql)
+            c.execute(product_two_sql)
+            c.execute(product_three_sql) 
+            c.execute(product_four_sql) 
+            c.execute(product_five_sql)
+            c.execute(product_six_sql)
+            c.execute(product_seven_sql)
+            c.execute(product_eight_sql)
+            c.execute(product_nine_sql)
+            c.execute(product_ten_sql)
+            conn.commit()
+        except sqlite3.OperationalError:
+            pass
