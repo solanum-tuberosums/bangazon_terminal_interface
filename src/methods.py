@@ -109,7 +109,8 @@ def get_active_customer_order(customer_id):
     db='db.sqlite3'
     conn = sqlite3.connect(db)
     c = conn.cursor()
-    sql =   ''' SELECT o.id, o.customer_id, o.date_begun, o.date_paid
+    sql =   ''' SELECT o.id, o.payment_type_id, o.date_begun, o.customer_id, 
+                    o.date_paid
                 FROM CustomerOrder o
                 INNER JOIN (
                     SELECT customer_id, max(date_begun) as MaxDate
