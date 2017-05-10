@@ -249,7 +249,7 @@ def build_db():
     """
     This method will build the db.sqlite3 file
 
-        --Arguments---
+    ---Arguments---
     None
 
     ---Return Value---
