@@ -44,7 +44,6 @@ def get_all_from_table(table_name, customer_id=None):
                     '''.format(str(customer_id))
             selection = [row for row in c.execute(sql)]
             conn.commit()
-            conn.close()
             return selection
         else:
             ordering = ' '
