@@ -164,62 +164,67 @@ def run_ordering_system(menu_command=None):
         # Get list of tuples for the popular products
         popular_product_list = get_popular_products()
 
-        # Set the max column width
-        product_column_total_spaces = 18
-        order_column_total_spaces = 11
-        customer_column_total_spaces = 11
-        revenue_column_total_spaces = 14
+        if len(popular_product_list)>0:
+            # Set the max column width
+            product_column_total_spaces = 18
+            order_column_total_spaces = 11
+            customer_column_total_spaces = 11
+            revenue_column_total_spaces = 14
 
-        # Set up Table
-        print("Product           Orders     Customers  Revenue")
-        print("*******************************************************")  
+            # Set up Table
+            print("Product           Orders     Customers  Revenue")
+            print("*******************************************************")  
 
-        #Loop Through list of tuples to print each row in table
-        for product in popular_product_list:
-            #Add columns for use in table totals
-            total_orders += product[1]
-            total_customers += product[2]
-            total_revenue += product[3]
-            
-            # Convert Tuple to list and truncate longer values in each column
-            product = list(product)
-            if len(str(product[0]))>14:
-                product[0] = str(product[0])[:14]+"..." 
-            if len(str(product[1]))>7:
-                product[1] = str(product[1])[:7]+"..."
-            if len(str(product[2]))>7:
-                product[2] = str(product[2])[:7]+"..."
-            if len(str(product[3]))>10:
-                product[3] = str(product[3])[:10]+"..."
+            #Loop Through list of tuples to print each row in table
+            for product in popular_product_list:
+                #Add columns for use in table totals
+                total_orders += product[1]
+                total_customers += product[2]
+                total_revenue += product[3]
+                
+                # Convert Tuple to list and truncate longer values in each column
+                product = list(product)
+                if len(str(product[0]))>14:
+                    product[0] = str(product[0])[:14]+"..." 
+                if len(str(product[1]))>7:
+                    product[1] = str(product[1])[:7]+"..."
+                if len(str(product[2]))>7:
+                    product[2] = str(product[2])[:7]+"..."
+                if len(str(product[3]))>10:
+                    product[3] = str(product[3])[:10]+"..."
 
-            # Calcualte spaces for each column in each row in table
-            space = " "
-            product_column_spaces = product_column_total_spaces-len(str(product[0]))
-            order_column_spaces = order_column_total_spaces-len(str(product[1]))
-            customer_column_spaces = customer_column_total_spaces-len(str(product[2]))
+                # Calcualte spaces for each column in each row in table
+                space = " "
+                product_column_spaces = product_column_total_spaces-len(str(product[0]))
+                order_column_spaces = order_column_total_spaces-len(str(product[1]))
+                customer_column_spaces = customer_column_total_spaces-len(str(product[2]))
 
-            # Print each row in table
-            print(str(product[0])+(space*product_column_spaces)+str(product[1])+(space*order_column_spaces)+str(product[2])+(space*customer_column_spaces)+"$"+str(product[3]))
+                # Print each row in table
+                print(str(product[0])+(space*product_column_spaces)+str(product[1])+(space*order_column_spaces)+str(product[2])+(space*customer_column_spaces)+"$"+str(product[3]))
 
-        print("*******************************************************")
+            print("*******************************************************")
+            rounded_total_revenue = round(total_revenue, 2)
 
-        # Truncate values to fit into columns
-        if len(str(total_orders))>7:
-            total_orders = str(total_orders)[:7]+"..."
-        if len(str(total_customers))>7:
-            total_customers = str(total_customers)[:7]+"..."
-        if len(str(total_revenue))>10:
-            total_revenue = str(total_revenue)[:10]+"..."
+            # Truncate values to fit into columns
+            if len(str(total_orders))>7:
+                total_orders = str(total_orders)[:7]+"..."
+            if len(str(total_customers))>7:
+                total_customers = str(total_customers)[:7]+"..."
+            if len(str(total_revenue))>10:
+                total_revenue = str(total_revenue)[:10]+"..."
 
-        # Calculate the number of spaces needed for each column
-        total_orders_spaces = order_column_total_spaces-len(str(total_orders))
-        total_customers_spaces = customer_column_total_spaces-len(str(total_customers))
-        total_revenue_spaces = revenue_column_total_spaces-len(str(total_revenue))
+            # Calculate the number of spaces needed for each column
+            total_orders_spaces = order_column_total_spaces-len(str(total_orders))
+            total_customers_spaces = customer_column_total_spaces-len(str(total_customers))
+            total_revenue_spaces = revenue_column_total_spaces-len(str(total_revenue))
 
-        # Print totals in their perfectly sized columns
-        print("Totals:           "+str(total_orders)+(space*total_orders_spaces)+str(total_customers)+(space*total_customers_spaces)+"$"+str(total_revenue))
-        input("Press enter to return to the main menu.\n")
-        run_ordering_system()
+            # Print totals in their perfectly sized columns
+            print("Totals:           "+str(total_orders)+(space*total_orders_spaces)+str(total_customers)+(space*total_customers_spaces)+"$"+str(rounded_total_revenue))
+            input("Press enter to return to the main menu.\n")
+            run_ordering_system()
+        else:
+            input("Nothing has been purchased yet, there's no contest broseph.\nPress enter to return to the main menu\n")
+            run_ordering_system()
             
     if menu_command == 7:
         print("Cya, Sucka! Thanks for visiting Bangazon.")

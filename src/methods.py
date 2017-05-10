@@ -82,5 +82,14 @@ def get_order_total(order_id):
     return order_total
 
 def get_popular_products():
-    return [('AA Batteries', 100, 20, 990.90),('Diapers', 50, 10, 640.95), ('Case Crackling Cola', 40, 30, 270.96)]
-
+        with sqlite3.connect('db.sqlite3') as conn:
+            c = conn.cursor()
+            c.execute("""SELECT p.title as Product, COUNT(po.id) as NumTimesOrdered, COUNT( distinct o.customer_id) NumberOfCustomersOrdered, (p.price * COUNT(po.id)) as Revenue
+                            FROM customerorder o, productorder po, product p
+                            WHERE o.id = po.order_id
+                            AND p.id = po.product_id
+                            AND o.date_paid = NOT NULL
+                            GROUP BY po.product_id
+                            ORDER BY NumTimesOrdered desc
+                            limit 5""")
+            return c.fetchall()
