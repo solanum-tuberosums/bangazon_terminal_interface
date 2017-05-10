@@ -61,7 +61,7 @@ CREATE TABLE CustomerOrder(
     payment_type_id                 INTEGER,
     date_begun                      DATE NOT NULL,
     customer_id                     INTEGER NOT NULL,
-    date_paid                       DATE CHECK(date_begun < date_paid),
+    date_paid                       DATE CHECK(date_begun <= date_paid),
     FOREIGN KEY (customer_id)       REFERENCES Customer(id) ON DELETE CASCADE);
 
 -- ProductOrder Table
