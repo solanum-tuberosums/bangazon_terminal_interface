@@ -27,15 +27,6 @@ def complete_order(order_id=None, pmt_type_id=None, db='db.sqlite3'):
         c.execute(update_order)
         conn.commit()
 
-        order_id = c.lastrowid()
-        get_last_order = '''
-                        SELECT *
-                        FROM CustomerOrder
-                        WHERE order_id == {}
-                    '''.format(order_id)
-        completed_order = [row for row in c.execute(get_last_order)]
-
-        return completed_order
 
 def get_active_customer_order(customer_id=None, db='db.sqlite3'):
 
