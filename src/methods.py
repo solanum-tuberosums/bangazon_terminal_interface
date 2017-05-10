@@ -42,8 +42,8 @@ def get_all_from_table(table_name, customer_id=None):
     c = conn.cursor()
     if customer_id:
         sql =   ''' SELECT * FROM paymenttype 
-                        WHERE paymenttype.customer_id = {}'''
-                        .format(str(customer_id))
+                    WHERE paymenttype.customer_id = {}
+                '''.format(str(customer_id))
         selection = [row for row in c.execute(sql)]
         conn.commit()
         conn.close()
@@ -54,8 +54,8 @@ def get_all_from_table(table_name, customer_id=None):
             ordering = 'last_name'
         elif table_name.lower() == 'product':
             ordering = 'id'
-        sql =   '''SELECT * FROM {} ORDER BY {}'''
-                    .format(table_name, ordering)
+        sql =   ''' SELECT * FROM {} ORDER BY {}
+                '''.format(table_name, ordering)
         selection = [row for row in c.execute(sql)]
         conn.commit()
         conn.close()
@@ -84,16 +84,16 @@ def get_active_customer_order(customer_id):
     db='db.sqlite3'
     conn = sqlite3.connect(db)
     c = conn.cursor()
-    sql = '''SELECT o.id, o.customer_id, o.date_begun, o.date_paid
-                 FROM CustomerOrder o
-                 INNER JOIN (
+    sql =   ''' SELECT o.id, o.customer_id, o.date_begun, o.date_paid
+                FROM CustomerOrder o
+                INNER JOIN (
                     SELECT customer_id, max(date_begun) as MaxDate
                     FROM CustomerOrder
                     WHERE customer_id == {0}
                  ) mco
-                 ON o.customer_id == mco.customer_id
-                 AND o.date_begun == mco.MaxDate'''
-                 .format(customer_id)
+                ON o.customer_id == mco.customer_id
+                AND o.date_begun == mco.MaxDate
+            '''.format(customer_id)
     selection = [row for row in c.execute(sql)]
     conn.commit()
     conn.close()
@@ -118,8 +118,8 @@ def flush_table(table_name):
     db='db.sqlite3'
     conn = sqlite3.connect(db)
     c = conn.cursor()
-    sql =   '''DELETE FROM {}'''
-                .format(table_name)
+    sql =   ''' DELETE FROM {}
+            '''.format(table_name)
     c.execute(sql)
     conn.commit()
     conn.close()
@@ -148,8 +148,8 @@ def save_to_db(table, values):
     valuesList = 'NULL'
     for val in values:
         valuesList = valuesList + ', "' + str(val) + '"'
-    sql =   '''INSERT INTO {} VALUES ({})'''
-            .format(table, valuesList)
+    sql =   ''' INSERT INTO {} VALUES ({})
+            '''.format(table, valuesList)
     c.execute(sql)
     conn.commit()
     pk = c.lastrowid
@@ -176,8 +176,8 @@ def get_order_total(order_id):
                 FROM ProductOrder po 
                 LEFT JOIN Product p 
                 ON po.product_id = p.id 
-                WHERE po.order_id = {}'''
-            .format(order_id)
+                WHERE po.order_id = {}
+            '''.format(order_id)
     c.execute(sql)
     conn.commit()
     order_total = c.fetchall()[0][0]    # Get(and convert to float) the first 
