@@ -29,7 +29,7 @@ CREATE TABLE Customer(
     postal_code                     CHAR(5),
     phone_number                    VARCHAR(15),
     date_created                    DATE NOT NULL);
-    
+
 -- PaymentType Table
 CREATE TABLE PaymentType(
     id                              INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
@@ -38,7 +38,7 @@ CREATE TABLE PaymentType(
     account_number                  VARCHAR(20) NOT NULL,
     customer_id                     INTEGER NOT NULL,
     FOREIGN KEY (customer_id)       REFERENCES Customer(id) ON DELETE CASCADE);
-    
+
 -- ProductType Table
 CREATE TABLE ProductType(
     id                               INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
@@ -54,17 +54,17 @@ CREATE TABLE Product(
     customer_id                     INTEGER NOT NULL,
     FOREIGN KEY (product_type_id)   REFERENCES ProductType(id) ON DELETE CASCADE,
     FOREIGN KEY (customer_id)       REFERENCES Customer(id) ON DELETE CASCADE);
-    
+
 -- CustomerOrder Table (formerly known as 'Order')
 CREATE TABLE CustomerOrder(
     id                              INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
-    payment_type_id                 INTEGER NOT NULL,
+    payment_type_id                 INTEGER,
     date_begun                      DATE NOT NULL,
     customer_id                     INTEGER NOT NULL,
     date_paid                       DATE CHECK(date_begun < date_paid),
     FOREIGN KEY (customer_id)       REFERENCES Customer(id) ON DELETE CASCADE);
 
--- ProductOrder Table    
+-- ProductOrder Table
 CREATE TABLE ProductOrder(
     id                              INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
     product_id                      INTEGER NOT NULL,

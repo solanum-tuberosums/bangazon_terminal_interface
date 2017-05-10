@@ -23,7 +23,6 @@ def get_all_from_table(table_name, customer_id=None):
         conn.close()
         return selection
 
-
 def complete_order(order_id=None, pmt_type_id=None, db='db.sqlite3'):
 
     with sqlite3.connect(db) as conn:
@@ -31,8 +30,9 @@ def complete_order(order_id=None, pmt_type_id=None, db='db.sqlite3'):
 
         update_order = '''
                      UPDATE CustomerOrder
-                     SET payment_type_id = {1}, date_paid = GETDATE()
-                     WHERE order_id == {0}
+                     SET
+                     payment_type_id = {1}, date_paid = strftime('%Y', '%m', '%d')
+                     WHERE id == {0}
                   '''.format(order_id, pmt_type_id)
         c.execute(update_order)
         conn.commit()
@@ -41,7 +41,7 @@ def get_active_customer_order(customer_id):
     db='db.sqlite3'
     conn = sqlite3.connect(db)
     c = conn.cursor()
-    command = '''SELECT o.id, o.customer_id, o.date_begun, o.date_paid
+    command = '''SELECT o.id, o.payment_type_id, o.date_begun, o.customer_id, o.date_paid
                  FROM CustomerOrder o
                  INNER JOIN (
                     SELECT customer_id, max(date_begun) as MaxDate
