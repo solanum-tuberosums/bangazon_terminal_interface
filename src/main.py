@@ -90,9 +90,7 @@ def run_ordering_system(menu_command=None):
             postal_code = input(' > ')
             print("Enter phone number")
             phone_number = input(' > ')
-
             customer_values = list()
-
             #need to split customer_name into first, middle, last
             customer_values.extend(
                                 [customer_first_name, customer_middle_name, 
@@ -103,12 +101,10 @@ def run_ordering_system(menu_command=None):
             active_customer_id = save_to_db("Customer", customer_values)
             print("\n --- NEW CUSTOMER ADDED ---\n")
             menu_command = None
-
         elif menu_command == 2:
             print("\nWhich customer will be active?")
             customer_list = get_all_from_table("Customer")
-
-            # Print list of all customer
+            # Print list of all customers
             for counter, customer in enumerate(customer_list):
                 print(
                     str(counter+1)+". ", customer[1], customer[2], customer[3]
@@ -123,7 +119,6 @@ def run_ordering_system(menu_command=None):
                 print('\n --- CUSTOMER DOES NOT EXIST ---\n')
                 menu_command = 2
             else:
-
                 # Set Active Customer
                 try:
                     active_customer_id = customer_list[
@@ -137,7 +132,6 @@ def run_ordering_system(menu_command=None):
                     menu_command = None
                 except:
                     print("\n --- CUSTOMER DOES NOT EXIST ---\n")
-
         elif menu_command == 3:
             if active_customer_id:
                 print("Name this payment account")
@@ -163,7 +157,6 @@ def run_ordering_system(menu_command=None):
                 input('''Please select an active customer or create a new 
                     customer. Press enter to return to main menu.\n > ''')
                 menu_command = None
-
         elif menu_command == 4:
             # Check active_customer and get/create order
             if active_customer_id:
@@ -184,7 +177,6 @@ def run_ordering_system(menu_command=None):
                     chosen_product_from_menu = int(input(' > '))
                 except:
                     chosen_product_from_menu = 0
-
                 if chosen_product_from_menu <= 0:
                     print('\n --- PRODUCT DOES NOT EXIST ---\n')
                 else:
@@ -208,8 +200,6 @@ def run_ordering_system(menu_command=None):
                     \n''')
                 input()
                 menu_command = None
-
-
         elif menu_command == 5:
             # Check active_customer and get order
             if active_customer_id:
@@ -220,7 +210,6 @@ def run_ordering_system(menu_command=None):
                     order_values = [None, datetime.datetime.now(), 
                                     active_customer_id, None]
                     order_id = save_to_db("CustomerOrder", order_values)
-
                 order_total = get_order_total(order_id)
                 # Check order total
                 if order_total != None:
@@ -251,7 +240,6 @@ def run_ordering_system(menu_command=None):
                             except:
                                 print('''\n --- MUST ENTER A SHOWN INTEGER ---
                                     \n''')
-
                         else:
                             temp_command = input('''Customer has no payment 
                                 types. Would you like to create a payment type? 
@@ -262,49 +250,38 @@ def run_ordering_system(menu_command=None):
                                 menu_command = 3
                             else:
                                 menu_command = None
-
                     elif response.lower() == "n":
                         menu_command = None
                     else:
                         input("Please press Y or N")
                         menu_command = 5
-
                 else:
                     input('''Please add some products to your order first. 
                         Press enter to return to main menu.\n''')
                     menu_command = None
-
             else:
                 input('''Please select an active customer or create a new 
                     customer. Press enter to return to main menu.\n''')
                 menu_command = None
-
         elif menu_command == 6:
             # Get list of tuples for the popular products
             popular_product_list = get_popular_products()
-
             if len(popular_product_list)>0:
-
                 # Set the max column width
                 product_column_total_spaces = 18
                 order_column_total_spaces = 11
                 customer_column_total_spaces = 11
                 revenue_column_total_spaces = 14
-
                 # Set up Table
                 print("Product           Orders     Customers  Revenue")
                 print('''****************************************************
                     ***''')
-
-
                 #Loop Through list of tuples to print each row in table
                 for product in popular_product_list:
                     #Add columns for use in table totals
                     total_orders += product[1]
                     total_customers += product[2]
                     total_revenue += product[3]
-
-
                     # Convert Tuple to list and truncate longer values in 
                     # each column
                     product = list(product)
@@ -317,7 +294,6 @@ def run_ordering_system(menu_command=None):
                         product[2] = str(product[2])[:7]+"..."
                     if len(str(product[3]))>10:
                         product[3] = str(product[3])[:10]+"..."
-
                     # Calcualte spaces for each column in each row in table
                     space = " "
                     product_column_spaces = product_column_total_spaces-len(
@@ -326,19 +302,14 @@ def run_ordering_system(menu_command=None):
                         str(product[1]))
                     customer_column_spaces = customer_column_total_spaces-len(
                         str(product[2]))
-
                     # Print each row in table
                     print(str(product[0])+(space*product_column_spaces)+str(
                         product[1])+(space*order_column_spaces)+str(
                         product[2])+(space*customer_column_spaces)+"$"+str(
                         product[3]))
-
                 print('''****************************************************
                     ***''')
-
                 rounded_total_revenue = round(total_revenue, 2)
-
-
                 # Truncate values to fit into columns
                 if len(str(total_orders))>7:
                     total_orders = str(total_orders)[:7]+"..."
@@ -346,7 +317,6 @@ def run_ordering_system(menu_command=None):
                     total_customers = str(total_customers)[:7]+"..."
                 if len(str(total_revenue))>10:
                     total_revenue = str(total_revenue)[:10]+"..."
-
                 # Calculate the number of spaces needed for each column
                 total_orders_spaces = order_column_total_spaces-len(str(
                     total_orders))
@@ -354,9 +324,7 @@ def run_ordering_system(menu_command=None):
                     total_customers))
                 total_revenue_spaces = revenue_column_total_spaces-len(str(
                     total_revenue))
-
                 # Print totals in their perfectly sized columns
-
                 print("Totals:           "+str(total_orders)+(
                     space*total_orders_spaces)+str(total_customers)+(
                     space*total_customers_spaces)+"$"+str(
@@ -370,10 +338,8 @@ def run_ordering_system(menu_command=None):
         else:
             print('\n --- MUST ENTER A VALID MENU OPTION ---\n')
             menu_command = None
-
     if menu_command == 7:
         print("Cya, Sucka! Thanks for visiting Bangazon.")
-
 if __name__ == "__main__":
     if os.path.isfile('db.sqlite3'):
         pass
