@@ -246,6 +246,9 @@ def run_ordering_system(menu_command=None):
         elif menu_command == 6:
             # Get list of tuples for the popular products
             popular_product_list = get_popular_products()
+            total_revenue = float()
+            total_orders = int()
+            total_customers = int()
             if len(popular_product_list)>0:
                 # Set the max column width
                 product_column_total_spaces = 18
@@ -289,23 +292,20 @@ def run_ordering_system(menu_command=None):
                         product[3]))
                 print('''*******************************************************''')
                 rounded_total_revenue = round(total_revenue, 2)
-                
+
                 # Truncate values to fit into columns
                 if len(str(total_orders))>7:
                     total_orders = str(total_orders)[:7]+"..."
                 if len(str(total_customers))>7:
                     total_customers = str(total_customers)[:7]+"..."
                 if len(str(total_revenue))>10:
-                    total_revenue_string = str(rounded_total_revenue)[:10]+"..."
-                else:
-                    total_revenue_string = str(rounded_total_revenue)
+                    rounded_total_revenue = str(rounded_total_revenue)[:10]+"..."
+
                 # Calculate the number of spaces needed for each column
                 total_orders_spaces = order_column_total_spaces-len(str(
                     total_orders))
                 total_customers_spaces = customer_column_total_spaces-len(str(
                     total_customers))
-                # The variable below is never used
-                # total_revenue_spaces = revenue_column_total_spaces-len(total_revenue_string)                # Print totals in their perfectly sized columns
                 print("Totals:           "+str(total_orders)+(
                     space*total_orders_spaces)+str(total_customers)+(
                     space*total_customers_spaces)+"$"+str(
