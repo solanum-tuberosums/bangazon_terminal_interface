@@ -1,4 +1,3 @@
-
 """
 --- Description ---
     Main Bangazon Command Line Interface module that contains all of the 
@@ -51,7 +50,6 @@ def run_ordering_system(menu_command=None):
     global total_revenue
 
     while menu_command != 7:
-
         if menu_command is None:
             print("*********************************************************")
             print("**  Welcome to Bangazon! Command Line Ordering System  **")
