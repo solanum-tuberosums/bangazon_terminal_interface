@@ -44,11 +44,6 @@ def run_ordering_system(menu_command=None):
     Author: Blaise Roberts, Jessica Younker
     """
 
-    global active_customer_id
-    global total_orders
-    global total_customers
-    global total_revenue
-
     while menu_command != 7:
         if menu_command is None:
             print("*********************************************************")
