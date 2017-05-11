@@ -222,11 +222,10 @@ def run_ordering_system(menu_command=None):
                                 print('''\n --- MUST ENTER A SHOWN INTEGER ---
                                     \n''')
                         else:
-                            temp_command = input('''Customer has no payment 
-                                types. Would you like to create a payment type? 
+                            temp_command = input('''Customer has no payment types. 
+                                Would you like to create a payment type? 
                                 (Y/N)\n > ''')
-                            if temp_command.lower() == '''y
-                                ''' or temp_command.lower() == 'yes':
+                            if temp_command.lower() == '''y''' or temp_command.lower() == 'yes':
                                 print('\nCREATING PAYMENT TYPE')
                                 menu_command = 3
                             else:
