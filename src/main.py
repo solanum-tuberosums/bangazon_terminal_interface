@@ -289,23 +289,23 @@ def run_ordering_system(menu_command=None):
                         product[3]))
                 print('''*******************************************************''')
                 rounded_total_revenue = round(total_revenue, 2)
+                
                 # Truncate values to fit into columns
                 if len(str(total_orders))>7:
                     total_orders = str(total_orders)[:7]+"..."
                 if len(str(total_customers))>7:
                     total_customers = str(total_customers)[:7]+"..."
-                # if len(str(total_revenue))>10:
-                #     total_revenue_string = str(total_revenue)[:10]+"..."
-                # else:
-                #     total_revenue_string = str(total_revenue)
+                if len(str(total_revenue))>10:
+                    total_revenue_string = str(rounded_total_revenue)[:10]+"..."
+                else:
+                    total_revenue_string = str(rounded_total_revenue)
                 # Calculate the number of spaces needed for each column
                 total_orders_spaces = order_column_total_spaces-len(str(
                     total_orders))
                 total_customers_spaces = customer_column_total_spaces-len(str(
                     total_customers))
                 # The variable below is never used
-                # total_revenue_spaces = revenue_column_total_spaces-len(total_revenue_string)
-                # Print totals in their perfectly sized columns
+                # total_revenue_spaces = revenue_column_total_spaces-len(total_revenue_string)                # Print totals in their perfectly sized columns
                 print("Totals:           "+str(total_orders)+(
                     space*total_orders_spaces)+str(total_customers)+(
                     space*total_customers_spaces)+"$"+str(
