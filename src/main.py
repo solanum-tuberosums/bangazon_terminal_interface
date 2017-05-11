@@ -374,9 +374,6 @@ def run_ordering_system(menu_command=None):
     if menu_command == 7:
         print("Cya, Sucka! Thanks for visiting Bangazon.")
 
-
-
-
 if __name__ == "__main__":
     if os.path.isfile('db.sqlite3'):
         pass
