@@ -27,9 +27,9 @@ def run_ordering_system(menu_command=None):
     Author: Blaise Roberts, Jessica Younker
     """
 
+    active_customer_id = None
 
     while menu_command != 7:
-        active_customer_id = None
         total_revenue = float()
         total_orders = int()
         total_customers = int()
