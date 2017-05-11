@@ -297,7 +297,7 @@ def run_ordering_system(menu_command=None):
                     total_orders = str(total_orders)[:7]+"..."
                 if len(str(total_customers))>7:
                     total_customers = str(total_customers)[:7]+"..."
-                if len(str(total_revenue))>10:
+                if len(str(rounded_total_revenue))>10:
                     rounded_total_revenue = str(rounded_total_revenue)[:10]+"..."
 
                 # Calculate the number of spaces needed for each column
