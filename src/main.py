@@ -10,11 +10,6 @@ import os.path
 from methods import *
 
 
-active_customer_id = None
-total_revenue = int()
-total_orders = int()
-total_customers = int()
-
 def run_ordering_system(menu_command=None):
     """
     This method is invoked to start and manage the lifecycle of this command 
@@ -31,6 +26,11 @@ def run_ordering_system(menu_command=None):
 
     Author: Blaise Roberts, Jessica Younker
     """
+
+    active_customer_id = None
+    total_revenue = float()
+    total_orders = int()
+    total_customers = int()
 
     while menu_command != 7:
         if menu_command is None:
@@ -297,14 +297,13 @@ def run_ordering_system(menu_command=None):
                 if len(str(total_customers))>7:
                     total_customers = str(total_customers)[:7]+"..."
                 if len(str(total_revenue))>10:
-                    total_revenue = str(total_revenue)[:10]+"..."
+                    total_revenue_string = str(total_revenue)[:10]+"..."
                 # Calculate the number of spaces needed for each column
                 total_orders_spaces = order_column_total_spaces-len(str(
                     total_orders))
                 total_customers_spaces = customer_column_total_spaces-len(str(
                     total_customers))
-                total_revenue_spaces = revenue_column_total_spaces-len(str(
-                    total_revenue))
+                total_revenue_spaces = revenue_column_total_spaces-len(total_revenue_string)
                 # Print totals in their perfectly sized columns
                 print("Totals:           "+str(total_orders)+(
                     space*total_orders_spaces)+str(total_customers)+(
