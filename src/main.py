@@ -3,18 +3,6 @@
     Main Bangazon Command Line Interface module that contains all of the 
     methods' invocations/calls and the logic for managing the user's 
     interaction with this program.
---- Global Variables ---
-    * active_customer_id:       used to reference the current active customer 
-                                in any possible scope
-    * total_revenue:            used in the popular_products feature 
-                                (menu option 6) to avoid looping through same 
-                                set of data twice
-    * total_customers:          used in the popular_products feature 
-                                (menu option 6) to avoid looping through same 
-                                set of data twice
-    * total_revenue:            used in the popular_products feature 
-                                (menu option 6) to avoid looping through same 
-                                set of data twice
 """
 
 import datetime
