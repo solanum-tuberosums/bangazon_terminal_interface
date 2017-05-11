@@ -237,6 +237,7 @@ def get_popular_products():
         c.execute(sql)
         return c.fetchall()
 
+
 def build_db():
     """
     This method will build the db.sqlite3 file
@@ -249,6 +250,7 @@ def build_db():
 
     Author: Blaise Roberts, Will Sims
     """
+    
     with sqlite3.connect('db.sqlite3') as conn:
         c = conn.cursor()
         sql_customer =      ''' CREATE TABLE Customer(
