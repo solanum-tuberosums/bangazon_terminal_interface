@@ -250,7 +250,7 @@ def build_db():
 
     Author: Blaise Roberts, Will Sims
     """
-    
+
     with sqlite3.connect('db.sqlite3') as conn:
         c = conn.cursor()
         sql_customer =      ''' CREATE TABLE Customer(
