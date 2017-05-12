@@ -119,7 +119,11 @@ def get_active_customer_order(customer_id):
                 '''.format(customer_id)
         selection = [row for row in c.execute(sql)]
         conn.commit()
-        return selection[0]
+
+        if len(selection) == 0:
+            return None
+        else:
+            return selection[0]
 
 
 def flush_table(table_name):
@@ -266,122 +270,122 @@ def build_db():
                                 date_created    DATE NOT NULL)
                             '''
         sql_payment_type =  ''' CREATE TABLE PaymentType(
-                                id              INTEGER NOT NULL PRIMARY KEY 
+                                id              INTEGER NOT NULL PRIMARY KEY
                                                     AUTOINCREMENT,
                                 account_label   VARCHAR(20),
                                 account_type    VARCHAR(20),
                                 account_number  VARCHAR(20) NOT NULL,
                                 customer_id     INTEGER NOT NULL,
-                                FOREIGN KEY     (customer_id) 
-                                                REFERENCES Customer(id) 
+                                FOREIGN KEY     (customer_id)
+                                                REFERENCES Customer(id)
                                                 ON DELETE CASCADE)
                             '''
         sql_product_type =  ''' CREATE TABLE ProductType(
-                                id              INTEGER NOT NULL PRIMARY KEY 
+                                id              INTEGER NOT NULL PRIMARY KEY
                                                     AUTOINCREMENT,
                                 label           VARCHAR(20))
                             '''
         sql_product =       ''' CREATE TABLE Product(
-                                id              INTEGER NOT NULL PRIMARY KEY 
+                                id              INTEGER NOT NULL PRIMARY KEY
                                                     AUTOINCREMENT,
                                 price           REAL NOT NULL,
                                 title           VARCHAR(20) NOT NULL,
                                 description     VARCHAR(20),
                                 product_type_id INTEGER NOT NULL,
                                 customer_id     INTEGER NOT NULL,
-                                FOREIGN KEY     (product_type_id)   
-                                                REFERENCES ProductType(id) 
+                                FOREIGN KEY     (product_type_id)
+                                                REFERENCES ProductType(id)
                                                 ON DELETE CASCADE,
-                                FOREIGN KEY     (customer_id)       
-                                                REFERENCES Customer(id) 
+                                FOREIGN KEY     (customer_id)
+                                                REFERENCES Customer(id)
                                                 ON DELETE CASCADE)
                             '''
         sql_customer_order ='''CREATE TABLE CustomerOrder(
-                                id              INTEGER NOT NULL PRIMARY KEY 
+                                id              INTEGER NOT NULL PRIMARY KEY
                                                     AUTOINCREMENT,
                                 payment_type_id INTEGER,
                                 date_begun      DATE NOT NULL,
                                 customer_id     INTEGER NOT NULL,
-                                date_paid       DATE CHECK  (date_begun <= 
+                                date_paid       DATE CHECK  (date_begun <=
                                                             date_paid),
-                                FOREIGN KEY     (customer_id)       
-                                                REFERENCES Customer(id) 
+                                FOREIGN KEY     (customer_id)
+                                                REFERENCES Customer(id)
                                                 ON DELETE CASCADE)
                             '''
         sql_product_order = ''' CREATE TABLE ProductOrder(
-                                id              INTEGER NOT NULL PRIMARY KEY 
+                                id              INTEGER NOT NULL PRIMARY KEY
                                                     AUTOINCREMENT,
                                 product_id      INTEGER NOT NULL,
                                 order_id        INTEGER NOT NULL,
-                                FOREIGN KEY     (product_id) 
-                                                REFERENCES Product(id) 
+                                FOREIGN KEY     (product_id)
+                                                REFERENCES Product(id)
                                                 ON DELETE CASCADE,
-                                FOREIGN KEY     (order_id)   
-                                                REFERENCES CustomerOrder(id) 
+                                FOREIGN KEY     (order_id)
+                                                REFERENCES CustomerOrder(id)
                                                 ON DELETE CASCADE)
                             '''
-        customer_one_sql =  ''' INSERT INTO Customer 
-                                    VALUES  (NULL, 'Jeremy', 'Will', 'Smith', 
-                                            '500 Interstate Blvd S.', 
-                                            'Nashville', 'TN', '37201', 
+        customer_one_sql =  ''' INSERT INTO Customer
+                                    VALUES  (NULL, 'Jeremy', 'Will', 'Smith',
+                                            '500 Interstate Blvd S.',
+                                            'Nashville', 'TN', '37201',
                                             '615-888-5555', '05-09-2017')
                             '''
-        customer_two_sql =  ''' INSERT INTO Customer 
-                                    VALUES(NULL, 'Blaise', 'Zak', 'Williams', 
-                                            '500 Interstate Blvd S.', 
-                                            'Nashville', 'TN', '37201', 
+        customer_two_sql =  ''' INSERT INTO Customer
+                                    VALUES(NULL, 'Blaise', 'Zak', 'Williams',
+                                            '500 Interstate Blvd S.',
+                                            'Nashville', 'TN', '37201',
                                             '615-888-5555', '05-09-2017')
                             '''
-        customer_three_sql =''' INSERT INTO Customer 
-                                    VALUES(NULL, 'Jessica', 'Z.', 'Michaels', 
-                                            '500 Interstate Blvd S.', 
-                                            'Nashville', 'TN', '37201', 
+        customer_three_sql =''' INSERT INTO Customer
+                                    VALUES(NULL, 'Jessica', 'Z.', 'Michaels',
+                                            '500 Interstate Blvd S.',
+                                            'Nashville', 'TN', '37201',
                                             '615-888-5555', '05-09-2017')
                             '''
-        product_type_one_sql =  ''' INSERT INTO ProductType 
+        product_type_one_sql =  ''' INSERT INTO ProductType
                                         VALUES(NULL, 'Round Toys')
                                 '''
-        product_type_two_sql =  ''' INSERT INTO ProductType 
+        product_type_two_sql =  ''' INSERT INTO ProductType
                                         VALUES(NULL, 'Angular Toys')
                                 '''
         product_one_sql =   '''     INSERT INTO Product
-                                        VALUES (NULL, 19.99, "Red Ball", 
+                                        VALUES (NULL, 19.99, "Red Ball",
                                             "Bouncy", 1, 1)
                             '''
         product_two_sql =   '''     INSERT INTO Product
-                                       VALUES (NULL, 29.99, "Ford Truck", 
+                                       VALUES (NULL, 29.99, "Ford Truck",
                                             "F-150", 1, 2);
                             '''
         product_three_sql = '''     INSERT INTO Product
-                                        VALUES (NULL, 9.99, "AA Batteries", 
+                                        VALUES (NULL, 9.99, "AA Batteries",
                                             "Fully-Charged", 1, 3);
                             '''
         product_four_sql =  '''     INSERT INTO Product
-                                        VALUES (NULL, 5.99, "Green Ball", 
+                                        VALUES (NULL, 5.99, "Green Ball",
                                             "Squishy", 1, 1);
                             '''
         product_five_sql =  '''     INSERT INTO Product
-                                        VALUES (NULL, 2.99, "White Out", 
+                                        VALUES (NULL, 2.99, "White Out",
                                             "Fix Mistakes", 1, 2);
                             '''
         product_six_sql =   '''     INSERT INTO Product
-                                        VALUES (NULL, 999.99, "Diamonds", 
+                                        VALUES (NULL, 999.99, "Diamonds",
                                             "Girl's Best Friend", 1, 3);
                             '''
         product_seven_sql = '''     INSERT INTO Product
-                                        VALUES (NULL, 39.99, "USB Drive", 
+                                        VALUES (NULL, 39.99, "USB Drive",
                                             "1TB", 1, 1);
                             '''
         product_eight_sql = '''     INSERT INTO Product
-                                        VALUES (NULL, 7.99, "Blocks", 
+                                        VALUES (NULL, 7.99, "Blocks",
                                             "Hard", 2, 1);
                             '''
         product_nine_sql =  '''     INSERT INTO Product
-                                        VALUES (NULL, 15.99, "Water Bottle", 
+                                        VALUES (NULL, 15.99, "Water Bottle",
                                             "Aluminum", 2, 2);
                             '''
         product_ten_sql =   '''     INSERT INTO Product
-                                        VALUES (NULL, 32.99, "Power Strip", 
+                                        VALUES (NULL, 32.99, "Power Strip",
                                             "Surge Protector", 2, 3);
                             '''
         try:
@@ -398,8 +402,8 @@ def build_db():
             c.execute(product_type_two_sql)
             c.execute(product_one_sql)
             c.execute(product_two_sql)
-            c.execute(product_three_sql) 
-            c.execute(product_four_sql) 
+            c.execute(product_three_sql)
+            c.execute(product_four_sql)
             c.execute(product_five_sql)
             c.execute(product_six_sql)
             c.execute(product_seven_sql)
