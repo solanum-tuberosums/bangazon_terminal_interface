@@ -144,7 +144,7 @@ def run_ordering_system(menu_command=None):
                 try:
                     order_tuple = get_active_customer_order(active_customer_id)
                     order_id = order_tuple[0]
-                except IndexError:
+                except TypeError:
                     order_values = [None, datetime.datetime.now(),
                                     active_customer_id, None]
                     order_id = save_to_db("CustomerOrder", order_values)
