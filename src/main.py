@@ -46,8 +46,8 @@ def run_ordering_system(menu_command=None):
             print("7. Leave Bangazon!")
             try:
                 menu_command = int(input
-                    ('''Please select the number that corresponds to your menu
-                        option\n > '''))
+                    ('Please select the number that corresponds to your menu '
+                        'option\n > '))
                 if menu_command <= 0:
                     # This type error will cause the except block below to run
                     raise TypeError
@@ -135,8 +135,8 @@ def run_ordering_system(menu_command=None):
                     print("\n *** PAYMENT TYPE SAVED *** \n")
                     menu_command = None
             else:
-                input('''Please select an active customer or create a new
-                    customer. Press enter to return to main menu.\n > ''')
+                input('Please select an active customer or create a new '
+                    'customer. Press enter to return to main menu.\n > ')
                 menu_command = None
         elif menu_command == 4:
             # Check active_customer and get/create order
@@ -176,9 +176,9 @@ def run_ordering_system(menu_command=None):
                             print("\n --- PRODUCT DOES NOT EXIST ---\n")
                             # menu_command = None
             else:
-                print('''\n --- PLEASE SELECT AN ACTIVE CUSTOMER OR CREATE A
-                    NEW CUSTOMER \n --- Press any key to return to main menu.
-                    \n''')
+                print('\n --- PLEASE SELECT AN ACTIVE CUSTOMER OR CREATE A '
+                    'NEW CUSTOMER \n --- Press any key to return to main menu.'
+                    '\n')
                 input()
                 menu_command = None
         elif menu_command == 5:
@@ -214,16 +214,16 @@ def run_ordering_system(menu_command=None):
                                 # Update order with chosen payment type id and
                                 # date paid
                                 complete_order(order_id, chosen_payment_type_id)
-                                input('''Your order is complete! Press enter to
-                                 return to main menu.\n''')
+                                input('Your order is complete! Press enter to '
+                                 'return to main menu.\n')
                                 menu_command = None
                             except:
                                 print('''\n --- MUST ENTER A SHOWN INTEGER ---
                                     \n''')
                         else:
-                            temp_command = input('''Customer has no payment
-                                types. Would you like to create a payment type?
-                                (Y/N)\n > ''')
+                            temp_command = input('Customer has no payment '
+                                'types. Would you like to create a payment '
+                                'type? (Y/N)\n > ')
                             if temp_command.lower() == '''y''' or temp_command.lower() == 'yes':
                                 print('\nCREATING PAYMENT TYPE')
                                 menu_command = 3
@@ -235,12 +235,12 @@ def run_ordering_system(menu_command=None):
                         input("Please press Y or N")
                         menu_command = 5
                 else:
-                    input('''Please add some products to your order first.
-                        Press enter to return to main menu.\n''')
+                    input('Please add some products to your order first. '
+                        'Press enter to return to main menu.\n')
                     menu_command = None
             else:
-                input('''Please select an active customer or create a new
-                    customer. Press enter to return to main menu.\n''')
+                input('Please select an active customer or create a new '
+                    'customer. Press enter to return to main menu.\n')
                 menu_command = None
         elif menu_command == 6:
             # Get list of tuples for the popular products
@@ -256,8 +256,8 @@ def run_ordering_system(menu_command=None):
                 revenue_column_total_spaces = 14
                 # Set up Table
                 print("Product           Orders     Customers  Revenue")
-                print('''****************************************************
-                    ***''')
+                print('****************************************************'
+                    '***')
                 #Loop Through list of tuples to print each row in table
                 for product in popular_product_list:
                     #Add columns for use in table totals
@@ -289,7 +289,7 @@ def run_ordering_system(menu_command=None):
                         product[1])+(space*order_column_spaces)+str(
                         product[2])+(space*customer_column_spaces)+"$"+str(
                         product[3]))
-                print('''*******************************************************''')
+                print('*******************************************************')
                 rounded_total_revenue = round(total_revenue, 2)
 
                 # Truncate values to fit into columns
@@ -312,8 +312,8 @@ def run_ordering_system(menu_command=None):
                 input("Press enter to return to the main menu.\n")
                 menu_command = None
             else:
-                input('''Nothing has been purchased yet, there's no contest,
-                    broseph.\nPress enter to return to the main menu\n''')
+                input("Nothing has been purchased yet, there's no contest, "
+                    'broseph.\nPress enter to return to the main menu\n')
                 menu_command = None
         else:
             print('\n --- MUST ENTER A VALID MENU OPTION ---\n')
