@@ -58,6 +58,8 @@ class TestDatabaseInteractions(unittest.TestCase):
 
         order = get_active_customer_order(customer_id)
 
+        self.assertIsNone(order)
+
         order_values_2 = [None, '2007-08-06', customer_id, None]
         order_values_3 = [None, '2016-01-27', customer_id, None]
         save_to_db("CustomerOrder", order_values_2)
@@ -128,11 +130,10 @@ class TestDatabaseInteractions(unittest.TestCase):
         ####### Important method, to update selected order ######
         complete_order(order_id, payment_type_id)
 
-        order_tuple = get_active_customer_order(customer_id)
+        order = get_active_customer_order(customer_id)
 
         # Checking the payment_type_id and the date_paid
-        self.assertIsNotNone(order_tuple[1])
-        self.assertIsNotNone(order_tuple[4])
+        self.assertIsNone(order)
 
     def test_get_all_from_customer_and_set_active_customer(self):
         # Insert customers
