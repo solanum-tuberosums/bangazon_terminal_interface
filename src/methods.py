@@ -209,6 +209,35 @@ def get_order_total(order_id):
                                             # the tuple returned from the query
         return order_total
 
+def get_order_details(order_id):
+    """
+    This method will return the list of products on a customer's order.
+
+    ---Arguments---
+    order_id(integer):      This represents the primary key of the order whose
+                            products will be returned
+
+    ---Return Value---
+    selection(list):        A list of tuples that contain our data for the
+                            products on the order.
+
+    Author: Blaise Roberts
+    """
+
+    with sqlite3.connect('db.sqlite3') as conn:
+        c = conn.cursor()
+        sql =   ''' SELECT p.title as Product, COUNT(po.id) as NumTimesOrdered,
+                        (p.price * COUNT(po.id)) as Subtotal
+                    FROM customerorder o, productorder po, product p
+                    WHERE o.id = {}
+                    and o.id = po.order_id
+                    AND p.id = po.product_id
+                    AND o.date_paid = 'None'
+                    GROUP BY po.product_id
+                    ORDER BY NumTimesOrdered desc
+                '''.format(order_id)
+        c.execute(sql)
+        return c.fetchall()
 
 def get_popular_products():
     """
