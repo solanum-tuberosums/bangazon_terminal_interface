@@ -29,7 +29,7 @@ def run_ordering_system(menu_command=None):
 
     active_customer_id = None
 
-    while menu_command != 8:
+    while menu_command != 9:
         total_revenue = float()
         total_orders = int()
         total_customers = int()
@@ -44,7 +44,8 @@ def run_ordering_system(menu_command=None):
             print("5. Complete an order")
             print("6. See product popularity")
             print("7. See active customer's current order")
-            print("8. Leave Bangazon!")
+            print("8. Add new saleable product to system")
+            print("9. Leave Bangazon!")
             try:
                 menu_command = int(input
                     ('Please select the number that corresponds to your menu '
@@ -55,34 +56,24 @@ def run_ordering_system(menu_command=None):
             except:
                 print("\n --- MUST ENTER A POSITIVE INTEGER ---\n")
                 menu_command = None
+        
+        ###
+        ###           OPTION
+        ###
+
         elif menu_command == 1:
-            print("Enter customer first name")
-            customer_first_name = input(' > ')
-            print("Enter customer middle initial")
-            customer_middle_name = input(' > ')
-            print("Enter customer last name")
-            customer_last_name = input(' > ')
-            print("Enter street address")
-            street_address = input(' > ')
-            print("Enter city")
-            city = input(' > ')
-            print("Enter state")
-            state = input(' > ')
-            print("Enter postal code")
-            postal_code = input(' > ')
-            print("Enter phone number")
-            phone_number = input(' > ')
-            customer_values = list()
-            #need to split customer_name into first, middle, last
-            customer_values.extend(
-                                [customer_first_name, customer_middle_name,
-                                customer_last_name, street_address, city,
-                                state, postal_code, phone_number,
-                                datetime.datetime.now()]
-                                )
-            active_customer_id = save_to_db("Customer", customer_values)
+            new_customer = get_user_input('new_customer')
+
+            # add a timestamp to mark time customer was added to database
+            new_customer.append(datetime.datetime.now())
+            active_customer_id = save_to_db("Customer", new_customer)
             print("\n --- NEW CUSTOMER ADDED ---\n")
             menu_command = None
+
+        ###
+        ###           OPTION
+        ###
+
         elif menu_command == 2:
             print("\nWhich customer will be active?")
             customer_list = get_all_from_table("Customer")
@@ -114,6 +105,11 @@ def run_ordering_system(menu_command=None):
                     menu_command = None
                 except:
                     print("\n --- CUSTOMER DOES NOT EXIST ---\n")
+
+        ###
+        ###           OPTION
+        ###
+
         elif menu_command == 3:
             if active_customer_id:
                 print("Name this payment account")
@@ -139,6 +135,11 @@ def run_ordering_system(menu_command=None):
                 input('Please select an active customer or create a new '
                     'customer. Press enter to return to main menu.\n > ')
                 menu_command = None
+
+        ###
+        ###           OPTION
+        ###
+
         elif menu_command == 4:
             # Check active_customer and get/create order
             if active_customer_id:
@@ -182,6 +183,11 @@ def run_ordering_system(menu_command=None):
                     '\n')
                 input()
                 menu_command = None
+
+        ###
+        ###           OPTION
+        ###
+
         elif menu_command == 5:
             # Check active_customer and get order
             if active_customer_id:
@@ -243,6 +249,11 @@ def run_ordering_system(menu_command=None):
                 input('Please select an active customer or create a new '
                     'customer. Press enter to return to main menu.\n')
                 menu_command = None
+        
+        ###
+        ###           OPTION
+        ###
+        
         elif menu_command == 6:
             # Get list of tuples for the popular products
             popular_product_list = get_popular_products()
@@ -317,6 +328,10 @@ def run_ordering_system(menu_command=None):
                     'broseph.\nPress enter to return to the main menu\n')
                 menu_command = None
 
+        ###
+        ###           OPTION
+        ###
+
         elif menu_command == 7:
             if active_customer_id:
                 try:
@@ -326,15 +341,45 @@ def run_ordering_system(menu_command=None):
                     print('{:*<57}'.format('*'))
                     for product in products_on_order:
                         print('{name:<27} {number:>8}'.format(name=product[0], number=product[1]))
+                    print('{:*<57}'.format('*'))
+                    input('Press Enter to continue')
                     menu_command = None
                 except TypeError:
                     print('CUSTOMER HAS NO ACTIVE ORDERS. ADD PRODUCTS TO AN ORDER FIRST.')
                     menu_command = None
             else:
                 print('PLEASE SELECT ACTIVE CUSTOMER')
+                input('Press Enter to continue')
                 menu_command = None 
 
+        ###
+        ###           OPTION 
+        ###
+
         elif menu_command == 8:
+            if active_customer_id:
+
+                new_product = get_user_input('new_product')
+                new_product.append(active_customer_id)
+    
+                try:
+                    float(new_product[0])
+                    save_to_db('Product', new_product)
+                    print('New product saved')
+                    menu_command = None
+                except ValueError:
+                    print('Price must be a number')
+                    menu_command = 8
+            else:
+                print('PLEASE SELECT ACTIVE CUSTOMER')
+                input('Press Enter to continue')
+                menu_command = None 
+
+        ###
+        ###           OPTION 
+        ###
+
+        elif menu_command == 9:
             print("Cya, Sucka! Thanks for visiting Bangazon.")
 
         else:

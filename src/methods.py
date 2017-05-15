@@ -257,7 +257,7 @@ def get_user_input(input_type=str()):
     new_values= list()
     input_queries = tuple()
 
-    # These are the possible input queries we accept:
+    # These are the possible input forms we understand:
     if input_type == 'new_product':
         input_queries = ('price', 'title', 'description', 'product_type')
 
@@ -277,11 +277,11 @@ def get_user_input(input_type=str()):
             product_types_list = get_all_from_table('ProductType')
             for index, item in enumerate(product_types_list):
                 print('{}. {}'.format(index + 1, item[1]))
-            new_values.extend(input('What is the {}?'.format(field.replace('_', ' '))))
+            new_values.append(input('What is the {}?'.format(field.replace('_', ' '))))
             break
 
         # otherwise, carry on.
-        new_values.extend(input('What is the {}?'.format(field.replace('_', ' '))))
+        new_values.append(input('What is the {}?'.format(field.replace('_', ' '))))
 
     return new_values
 
