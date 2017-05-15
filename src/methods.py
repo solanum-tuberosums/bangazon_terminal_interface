@@ -51,9 +51,11 @@ def get_all_from_table(table_name, customer_id=None):
                 ordering = 'last_name'
             elif table_name.lower() == 'product':
                 ordering = 'id'
-            sql =   ''' SELECT * FROM {} ORDER BY {}
-                    '''.format(table_name, ordering)
+            elif table_name.lower() == 'producttype':
+                ordering = 'id'
+            sql =   "SELECT * FROM {} ORDER BY {}".format(table_name, ordering)
             selection = [row for row in c.execute(sql)]
+
             conn.commit()
             return selection
 
@@ -178,6 +180,8 @@ def save_to_db(table, values):
         conn.commit()
         pk = c.lastrowid
         return pk
+
+
 
 
 def get_order_total(order_id):

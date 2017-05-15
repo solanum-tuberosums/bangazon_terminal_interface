@@ -10,6 +10,15 @@ import os.path
 from methods import *
 
 
+
+
+
+
+# Users have said that sometime they need to enter in a product for a customer over the phone, 
+# so this admin interface must allow a customer service person to create a new product and specify
+#  the active customer as the seller.
+
+
 def run_ordering_system(menu_command=None):
     """
     This method is invoked to start and manage the lifecycle of this command
@@ -29,7 +38,7 @@ def run_ordering_system(menu_command=None):
 
     active_customer_id = None
 
-    while menu_command != 7:
+    while menu_command != 10:
         total_revenue = float()
         total_orders = int()
         total_customers = int()
@@ -43,7 +52,8 @@ def run_ordering_system(menu_command=None):
             print("4. Add product to shopping cart")
             print("5. Complete an order")
             print("6. See product popularity")
-            print("7. Leave Bangazon!")
+            print("7. Add Product")
+            print("8. Leave Bangazon!")
             try:
                 menu_command = int(input
                     ('Please select the number that corresponds to your menu '
@@ -243,6 +253,7 @@ def run_ordering_system(menu_command=None):
                     'customer. Press enter to return to main menu.\n')
                 menu_command = None
         elif menu_command == 6:
+            print("666666")
             # Get list of tuples for the popular products
             popular_product_list = get_popular_products()
             total_revenue = float()
@@ -315,11 +326,64 @@ def run_ordering_system(menu_command=None):
                 input("Nothing has been purchased yet, there's no contest, "
                     'broseph.\nPress enter to return to the main menu\n')
                 menu_command = None
+        elif menu_command == 7:
+            if active_customer_id is not None:
+                print("\n *** Add a product *** \n")
+                print("Enter product name: ")
+                product_title = input(' > ')
+                print("Enter product price: ")
+                product_price = input(' > ')
+                try:
+                    product_price = float(product_price)
+                except:
+                    pass
+
+                if isinstance(product_price, float):
+                    print("Enter product description: ")
+                    product_description = input(' > ')
+
+                    product_types = get_all_from_table("ProductType")
+
+                    print("Choose a product type: ")
+                    for p in product_types:
+                        print(str(p[0]) + ". " + p[1])
+                    product_type_id = input(" > ")
+                    if product_type_id == '0':
+                        print("\n --- MUST ENTER AN INTEGER > 0 ---\n")
+                        menu_command = 7
+                    else:
+                        try:
+                            product_type_id = int(product_type_id)
+                            product_values = list()
+                            product_values.extend([ product_price, product_title,
+                                                    product_description, product_type_id,
+                                                    active_customer_id])
+
+                            new_product_id = save_to_db("Product", product_values)
+                            print("\n *** NEW PRODUCTADDEDD ***\n *** Product ID: --", str(new_product_id) + "--\n")
+                            menu_command = None
+                            # Customer ID
+                        except:
+                            print("\n --- MUST ENTER AN INTEGER --- \n")
+                            menu_command = 7
+                            pass
+                else:
+                    print("\n--- PRODUCT PRICE MUST BE A REAL NUMBER ---\n")
+            else:
+                print("\n --- MUST SET ACTIVE CUSTOMER FIRST ---\n --- Press any key to return.\n")
+                input(' > ')
+                menu_command = None
+
+            # menu_command = None
+
+
+        elif menu_command == 8:
+            print("Cya, Sucka! Thanks for visiting Bangazon.")
+            menu_command = 10
         else:
             print('\n --- MUST ENTER A VALID MENU OPTION ---\n')
             menu_command = None
-    if menu_command == 7:
-        print("Cya, Sucka! Thanks for visiting Bangazon.")
+
 if __name__ == "__main__":
     if os.path.isfile('db.sqlite3'):
         pass
