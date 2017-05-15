@@ -394,7 +394,7 @@ def run_ordering_system(menu_command=None):
                 print("******* Current Customer Order *******")
                 print("**************************************\n")
                 for x in products_on_order:
-                    print(x[5] + ": " + str(x[4]))
+                    print(x[5] + ": $" + str(x[4]))
                 print("\nPRESS ANY BUTTON TO RETURN")
                 input(" > ")
                 menu_command = None
