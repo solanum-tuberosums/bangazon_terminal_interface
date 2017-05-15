@@ -29,7 +29,7 @@ def run_ordering_system(menu_command=None):
 
     active_customer_id = None
 
-    while menu_command != 7:
+    while menu_command != 8:
         total_revenue = float()
         total_orders = int()
         total_customers = int()
@@ -41,9 +41,10 @@ def run_ordering_system(menu_command=None):
             print("2. Choose active customer")
             print("3. Create a payment option")
             print("4. Add product to shopping cart")
-            print("5. Complete an order")
-            print("6. See product popularity")
-            print("7. Leave Bangazon!")
+            print("5. Add product for resale")
+            print("6. Complete an order")
+            print("7. See product popularity")
+            print("8. Leave Bangazon!")
             try:
                 menu_command = int(input
                     ('Please select the number that corresponds to your menu '
@@ -181,7 +182,42 @@ def run_ordering_system(menu_command=None):
                     '\n')
                 input()
                 menu_command = None
+
+
+                # NEw Command 5
         elif menu_command == 5:
+            if active_customer_id:
+                print("Enter the name of the product\n")
+                product_name = input(' > ')
+                if len(product_name) <= 0:
+                    print("\n --- PLEASE GIVE YOUR PRODUCT A NAME ---\n")
+                    menu_command = 5
+                else:
+                    print("Enter the price of the product\n")
+                    product_price = input(' > ')
+                    if len(product_price) <= 0:
+                        print("\n --- PLEASE GIVE YOUR PRODUCT A PRICE ---\n")
+                        menu_command = 5
+                    print("Enter the description of the product")
+                    product_description = input()
+                    product_values = list()
+                    product_values.extend(
+                                [product_price, product_name, product_description,
+                                1, active_customer_id]
+                                )
+                    save_to_db("Product", product_values)
+                    print("\n *** PRODUCT SAVED *** \n")
+                    menu_command = None
+            else:
+                input('Please select an active customer or create a new '
+                    'customer. Press enter to return to main menu.\n > ')
+                menu_command = None
+
+
+
+
+
+        elif menu_command == 6:
             # Check active_customer and get order
             if active_customer_id:
                 try:
@@ -242,7 +278,7 @@ def run_ordering_system(menu_command=None):
                 input('Please select an active customer or create a new '
                     'customer. Press enter to return to main menu.\n')
                 menu_command = None
-        elif menu_command == 6:
+        elif menu_command == 7:
             # Get list of tuples for the popular products
             popular_product_list = get_popular_products()
             total_revenue = float()
