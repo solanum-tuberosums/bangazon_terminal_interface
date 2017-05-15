@@ -53,7 +53,8 @@ def run_ordering_system(menu_command=None):
             print("5. Complete an order")
             print("6. See product popularity")
             print("7. Add Product")
-            print("8. Leave Bangazon!")
+            print("8. View Customer Order")
+            print("9. Leave Bangazon!")
             try:
                 menu_command = int(input
                     ('Please select the number that corresponds to your menu '
@@ -376,8 +377,30 @@ def run_ordering_system(menu_command=None):
 
             # menu_command = None
 
-
         elif menu_command == 8:
+            print(active_customer_id)
+            order_tuple = get_active_customer_order(active_customer_id)
+
+            my_order_id = order_tuple[0]
+            try:
+                my_order_id = int(my_order_id)
+            except:
+                pass
+
+            if isinstance(my_order_id, int):
+                print("\n ORDER ID: ", str(my_order_id) + "\n")
+                products_on_order = get_active_customer_order_details("CustomerOrder", my_order_id)
+                print("**************************************")
+                print("******* Current Customer Order *******")
+                print("**************************************\n")
+                for x in products_on_order:
+                    print(x[5] + ": " + str(x[4]))
+                print("\nPRESS ANY BUTTON TO RETURN")
+                input(" > ")
+                menu_command = None
+            else:
+                menu_command = None
+        elif menu_command == 9:
             print("Cya, Sucka! Thanks for visiting Bangazon.")
             menu_command = 10
         else:

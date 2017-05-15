@@ -247,6 +247,8 @@ def get_popular_products():
 
 
 def build_db():
+    
+    
     """
     This method will build the db.sqlite3 file
 
@@ -417,3 +419,60 @@ def build_db():
             conn.commit()
         except sqlite3.OperationalError:
             pass
+
+
+
+def get_active_customer_order_details(table_name, order_id=None):
+
+    with sqlite3.connect('db.sqlite3') as conn:
+        c = conn.cursor()
+        if order_id:
+            sql =   ''' SELECT * FROM productorder po, product p
+                        WHERE po.product_id = p.id
+                        AND po.order_id = {}
+                    '''.format(str(order_id))
+            selection = [row for row in c.execute(sql)]
+            conn.commit()
+            return selection
+        else:
+            ordering = ' '
+            if table_name.lower() == 'customer':
+                ordering = 'last_name'
+            elif table_name.lower() == 'product':
+                ordering = 'id'
+            elif table_name.lower() == 'producttype':
+                ordering = 'id'
+            sql =   "SELECT * FROM {} ORDER BY {}".format(table_name, ordering)
+            selection = [row for row in c.execute(sql)]
+
+            conn.commit()
+            return selection
+
+
+def complete_order(order_id, pmt_type_id):
+    """
+    This method changes the state of an order to completed by updating two
+    fields in the appropriate row of the CustomerOrder table. It updates the
+    payment_type_id to correspond to the payment used by the customer, and it
+    updates the date_paid to the current date and time.
+
+    ---Arguments---
+    order_id(integer):      The SQL id of the order we wish to change.
+
+    pmt_type_id(integer):   The SQL id of the payment type that the customer
+                            used.
+
+    ---Return Value---
+    NONE
+
+    Author: Zak Spence
+    """
+    with sqlite3.connect('db.sqlite3') as conn:
+        c = conn.cursor()
+        sql =   ''' UPDATE CustomerOrder
+                    SET
+                    payment_type_id = {1}, date_paid = datetime('now')
+                    WHERE id == {0}
+                '''.format(order_id, pmt_type_id)
+        c.execute(sql)
+        conn.commit()
