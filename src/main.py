@@ -8,7 +8,7 @@
 import datetime
 import os.path
 from methods import *
-
+import itertools
 
 def run_ordering_system(menu_command=None):
     """
@@ -29,7 +29,7 @@ def run_ordering_system(menu_command=None):
 
     active_customer_id = None
 
-    while menu_command != 7:
+    while menu_command != 8:
         total_revenue = float()
         total_orders = int()
         total_customers = int()
@@ -43,7 +43,8 @@ def run_ordering_system(menu_command=None):
             print("4. Add product to shopping cart")
             print("5. Complete an order")
             print("6. See product popularity")
-            print("7. Leave Bangazon!")
+            print("7. See active customer's current order")
+            print("8. Leave Bangazon!")
             try:
                 menu_command = int(input
                     ('Please select the number that corresponds to your menu '
@@ -315,11 +316,31 @@ def run_ordering_system(menu_command=None):
                 input("Nothing has been purchased yet, there's no contest, "
                     'broseph.\nPress enter to return to the main menu\n')
                 menu_command = None
+
+        elif menu_command == 7:
+            if active_customer_id:
+                try:
+                    active_order = get_active_customer_order(active_customer_id)
+                    products_on_order = get_active_customer_order_products(active_order[0])
+                    print('{:<27} {}'.format('Product', 'Quantity'))
+                    print('{:*<57}'.format('*'))
+                    for product in products_on_order:
+                        print('{name:<27} {number:>8}'.format(name=product[0], number=product[1]))
+                    menu_command = None
+                except TypeError:
+                    print('CUSTOMER HAS NO ACTIVE ORDERS. ADD PRODUCTS TO AN ORDER FIRST.')
+                    menu_command = None
+            else:
+                print('PLEASE SELECT ACTIVE CUSTOMER')
+                menu_command = None 
+
+        elif menu_command == 8:
+            print("Cya, Sucka! Thanks for visiting Bangazon.")
+
         else:
             print('\n --- MUST ENTER A VALID MENU OPTION ---\n')
             menu_command = None
-    if menu_command == 7:
-        print("Cya, Sucka! Thanks for visiting Bangazon.")
+
 if __name__ == "__main__":
     if os.path.isfile('db.sqlite3'):
         pass

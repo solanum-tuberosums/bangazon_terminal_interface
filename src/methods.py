@@ -37,25 +37,25 @@ def get_all_from_table(table_name, customer_id=None):
     """
 
     with sqlite3.connect('db.sqlite3') as conn:
+        sql = str()
+        ordering = str()
         c = conn.cursor()
         if customer_id:
             sql =   ''' SELECT * FROM paymenttype
                         WHERE paymenttype.customer_id = {}
                     '''.format(str(customer_id))
-            selection = [row for row in c.execute(sql)]
-            conn.commit()
-            return selection
+        elif table_name.lower() == 'producttype':
+            sql = 'SELECT * FROM producttype'
         else:
-            ordering = ' '
             if table_name.lower() == 'customer':
                 ordering = 'last_name'
             elif table_name.lower() == 'product':
                 ordering = 'id'
             sql =   ''' SELECT * FROM {} ORDER BY {}
                     '''.format(table_name, ordering)
-            selection = [row for row in c.execute(sql)]
-            conn.commit()
-            return selection
+        selection = [row for row in c.execute(sql)]
+        conn.commit()
+        return selection
 
 
 def complete_order(order_id, pmt_type_id):
@@ -124,7 +124,6 @@ def get_active_customer_order(customer_id):
             return None
         else:
             return selection[0]
-
 
 def flush_table(table_name):
     """
@@ -241,6 +240,50 @@ def get_popular_products():
         c.execute(sql)
         return c.fetchall()
 
+def get_active_customer_order_products(active_order=int()):
+    with sqlite3.connect('db.sqlite3') as conn:
+        c = conn.cursor()
+        sql = ''' SELECT p.title as ProductName, COUNT(po.id) as NumProducts
+                  FROM product p, productorder po, customerorder o
+                  WHERE p.id == po.product_id
+                  AND o.id == {}
+                  GROUP BY p.title
+              '''.format(active_order)
+        c.execute(sql)
+        return c.fetchall()
+
+def get_user_input(input_type=str()):
+
+    new_values= list()
+    input_queries = tuple()
+
+    # These are the possible input queries we accept:
+    if input_type == 'new_product':
+        input_queries = ('price', 'title', 'description', 'product_type')
+
+    elif input_type == 'new_customer':
+        input_queries = ('first_name', 'middle_name', 'last_name',
+                         'street_address', 'city', 'state', 'postal_code',
+                         'phone_number')
+
+    # Return None if our function doesn't know the input_type
+    else:
+        return None
+
+    for field in input_queries:
+        # new products have a foreign key of product_type which a user
+        # must select from a list. We account for that edge case here:
+        if field == 'product_type':
+            product_types_list = get_all_from_table('ProductType')
+            for index, item in enumerate(product_types_list):
+                print('{}. {}'.format(index + 1, item[1]))
+            new_values.extend(input('What is the {}?'.format(field.replace('_', ' '))))
+            break
+
+        # otherwise, carry on.
+        new_values.extend(input('What is the {}?'.format(field.replace('_', ' '))))
+
+    return new_values
 
 def build_db():
     """
