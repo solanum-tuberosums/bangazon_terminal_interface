@@ -247,6 +247,7 @@ def get_active_customer_order_products(active_order=int()):
                   FROM product p, productorder po, customerorder o
                   WHERE p.id == po.product_id
                   AND o.id == {}
+                  AND po.order_id == o.id
                   GROUP BY p.title
               '''.format(active_order)
         c.execute(sql)
