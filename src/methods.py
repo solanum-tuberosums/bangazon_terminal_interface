@@ -241,6 +241,22 @@ def get_popular_products():
         return c.fetchall()
 
 def get_active_customer_order_products(active_order=int()):
+    '''
+        This function is used to query all products that are currently assigned
+        to a customer's order. 
+
+        ---Arguments---
+        active_order(int):  the primary key of the customer's current open order
+
+        ---Return Value---
+        products(list):     a list of tuples representing the title(string) of
+                            the product on the order and the quantity(int)
+                            ordered, taking the structure [(title, quantity)...]
+
+        ---Author---
+        Zak Spence
+        
+    '''
     with sqlite3.connect('db.sqlite3') as conn:
         c = conn.cursor()
         sql = ''' SELECT p.title as ProductName, COUNT(po.id) as NumProducts
@@ -250,11 +266,32 @@ def get_active_customer_order_products(active_order=int()):
                   AND po.order_id == o.id
                   GROUP BY p.title
               '''.format(active_order)
-        c.execute(sql)
-        return c.fetchall()
+        products = [row for row in c.execute(sql)]
+        return products
 
 def get_user_input(input_type=str()):
+    '''
+        This method abstracts the need to take input from a user when adding
+        entries to a database. More processing may be required after this
+        value is returned. For instance, a foreign key or a timestamp may need
+        to be appended. 
+       
+        ---Arguments---
+        input_type(str):    a string representing the action for which we need to
+                            gather values. Accepted strings are:
+                
+                                'new_product'
+                                'new_customer'
+                                'new_payment_type'
 
+        ---Return Value---
+        new_values(list):   the values taken as input from the user, stored in the
+                            order in which they need to be inserted.
+
+        ---Author---
+        Zak Spence
+
+    '''
     new_values= list()
     input_queries = tuple()
 
@@ -266,6 +303,9 @@ def get_user_input(input_type=str()):
         input_queries = ('first_name', 'middle_name', 'last_name',
                          'street_address', 'city', 'state', 'postal_code',
                          'phone_number')
+
+    elif input_type == 'payment_type':
+        input_queries = ('account_label', 'account_type', 'account_number')
 
     # Return None if our function doesn't know the input_type
     else:

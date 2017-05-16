@@ -194,3 +194,37 @@ class TestDatabaseInteractions(unittest.TestCase):
 
         self.assertEqual(total_from_db, total)
 
+    def test_get_order_products(self):
+        # Create customer
+        customer_id = save_to_db('Customer', self.customer_values)
+
+        # Create payment type
+        payment_type_values = [
+                               self.faker.word(), self.faker.credit_card_provider(),
+                               self.faker.credit_card_number(),
+                               customer_id
+                              ]
+        
+        payment_type_id = save_to_db('PaymentType', payment_type_values)
+     
+        # Create order
+        order_values = [None, '2016-01-27', customer_id, None]
+       
+        order_id = save_to_db('Order', order_values)
+        
+        # Create products
+        product_one_price = self.faker.random_int()
+        product_two_price = self.faker.random_int()
+
+        first_product_values = [product_one_price, self.faker.word(), self.faker.text(), 1, customer_id]
+
+        first_product_id = save_to_db("Product", first_product_values)
+
+        second_product_values = [product_two_price, self.faker.word(), self.faker.text(), 1, customer_id]
+
+        second_product_id = save_to_db("Product", second_product_values)
+
+        save_to_db("ProductOrder", [first_product_id, order_id])
+        save_to_db("ProductOrder", [second_product_id, order_id])
+
+ 

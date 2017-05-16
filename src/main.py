@@ -112,25 +112,11 @@ def run_ordering_system(menu_command=None):
 
         elif menu_command == 3:
             if active_customer_id:
-                print("Name this payment account")
-                account_label = input(' > ')
-                if len(account_label) <= 0:
-                    print("\n --- PLEASE GIVE YOUR PAYMENT TYPE A NAME ---\n")
-                    menu_command = 3
-                else:
-                    print("Enter payment type (e.g. AmEx, Visa, Checking)")
-                    account_type = input(' > ')
-                    print("Enter account number")
-                    account_number = input(' > ')
-                    customer_id = active_customer_id
-                    payment_type_values = list()
-                    payment_type_values.extend(
-                        [account_label, account_type, account_number,
-                        customer_id]
-                        )
-                    save_to_db("PaymentType", payment_type_values)
-                    print("\n *** PAYMENT TYPE SAVED *** \n")
-                    menu_command = None
+                new_payment_type = get_user_input('payment_type')
+                new_payment_type.append(active_customer_id)
+                save_to_db("PaymentType", new_payment_type)
+                print("\n *** PAYMENT TYPE SAVED *** \n")
+                menu_command = None
             else:
                 input('Please select an active customer or create a new '
                     'customer. Press enter to return to main menu.\n > ')
