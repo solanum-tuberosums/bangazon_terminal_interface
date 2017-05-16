@@ -29,7 +29,7 @@ def run_ordering_system(menu_command=None):
 
     active_customer_id = None
 
-    while menu_command != 8:
+    while menu_command != 9:
         total_revenue = float()
         total_orders = int()
         total_customers = int()
@@ -44,7 +44,8 @@ def run_ordering_system(menu_command=None):
             print("5. Complete an order")
             print("6. See product popularity")
             print("7. View active customer order")
-            print("8. Leave Bangazon!")
+            print("8. Add product to sell")
+            print("9. Leave Bangazon!")
             try:
                 menu_command = int(input
                     ('Please select the number that corresponds to your menu '
@@ -316,6 +317,7 @@ def run_ordering_system(menu_command=None):
                 input("Nothing has been purchased yet, there's no contest, "
                     'broseph.\nPress enter to return to the main menu\n')
                 menu_command = None
+        
         elif menu_command == 7:
             # Check active_customer and get current order
             if active_customer_id:
@@ -341,12 +343,46 @@ def run_ordering_system(menu_command=None):
                     '\n')
                 input()
                 menu_command = None
-                   
+
+        elif menu_command == 8:
+            # Check active_customer and add product for sale
+            if active_customer_id:
+                seller_id = active_customer_id
+                try:
+                    print("Enter product name")
+                    product_title = input(' > ')
+                    print("Enter product price")
+                    product_price = input(' > ')
+                    print("Enter product description")
+                    product_description = input(' > ')
+                    
+                    product_type_choices = get_all_from_table("ProductType")
+                    for counter, product_type in enumerate(product_type_choices):
+                        print(str(counter+1)+". ", product_type[1])
+                    print("Select from existing product types or press enter to add new")
+                                    
+                    product_type = input(' > ')
+                    #or choose from a list of existing product types
+                    product_values = []
+                    product_values.extend([product_price, product_title, 
+                                            product_description, product_type_id, 
+                                            active_customer_id])
+                    product_for_sale_id = save_to_db("Product", product_values)
+                    print("\n *** YOUR PRODUCT HAS BEEN ADDED ***\n")
+                    menu_command = None
+                except TypeError:
+                    product_values = [None, price, title, description, 
+                                    product_type_id, active_customer_id]
+                    product_id = save_to_db("Product", product_values)
+            else:
+                input('Please select an active customer or create a new '
+                    'customer to designate as the seller. Press enter to return to main menu.\n > ')
+                menu_command = None       
 
         else:
             print('\n --- MUST ENTER A VALID MENU OPTION ---\n')
             menu_command = None
-    if menu_command == 8:
+    if menu_command == 9:
         print("Cya, Sucka! Thanks for visiting Bangazon.")
 if __name__ == "__main__":
     if os.path.isfile('db.sqlite3'):
