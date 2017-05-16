@@ -330,12 +330,16 @@ def run_ordering_system(menu_command=None):
                     order_id = save_to_db("CustomerOrder", order_values)
                 # Return tuple with active customer's open order info
                 open_order = get_products_on_order(active_customer_id)
+                print("open_order", open_order)
                 print("\n *** CURRENT ORDER: ***\n")
+                # Tally up current order total 
+                total_cost = 0
                 for counter, product in enumerate(open_order):
-                    # total_cost = sum(product[1])
+                    product_cost = float(product[1])
+                    total_cost += product_cost
                     print(str(counter+1)+". ", product[0]+ " @"+"$"+str(product[1]))
-                   
-                    # print("Total Cost: "+"$"+total_cost)
+                print("-------------------------------")
+                print("Current Total: $"+str(total_cost)+"\n")
                 menu_command = None
             else:
                 print('\n --- PLEASE SELECT AN ACTIVE CUSTOMER OR CREATE A '
@@ -364,7 +368,7 @@ def run_ordering_system(menu_command=None):
                     # Display product types
                     for counter, product_type in enumerate(product_type_choices):
                         print(str(counter+1)+". ", product_type[1]) 
-                    # User can select existing product type (ok to use pt.id?)
+                    # User can select existing product type (ok to use pt.id?..itertools error)
                     try:
                         product_type_id = int(input(' > '))
                     except:
@@ -374,21 +378,11 @@ def run_ordering_system(menu_command=None):
                     # User can add a new product type
                     else:
                         if len(product_type_choices) == product_type_id:
-                            new_product_type_label = input("Enter a new Product Type for your product")
-                            save_to_db("ProductType", (new_product_type_id, new_product_type_label))
+                            print("Enter a new Product Type for your product")
+                            new_product_type_label = input(' > ')
+                            new_product_type_id = save_to_db("ProductType", (new_product_type_label,))
                             menu_command = None
-                        # # Add product type to product entry
-                        # else:
-                        #     try:
-                        #         product_type_id = product_type_choices[
-                        #             product_type_id-1][0]
-
-                        #         print("\n *** PRODUCT ADDED ***\n")
-                        #         menu_command = None
-                        #     except:
-                        #         print("\n --- PRODUCT TYPE DOES NOT EXIST ---\n")
-                        #         menu_command = None             
-                    #or choose from a list of existing product types
+                    # Save product data to database
                     product_values = []
                     product_values.extend([product_price, product_title, 
                                             product_description, product_type_id, 

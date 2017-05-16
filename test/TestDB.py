@@ -194,3 +194,31 @@ class TestDatabaseInteractions(unittest.TestCase):
 
         self.assertEqual(total_from_db, total)
 
+    def test_get_products_on_order(self):
+        # Insert customer and get ID
+        customer_id = save_to_db("Customer", self.customer_values)
+        # Insert order and get ID
+        order_values = [None, self.faker.date(), customer_id, None]
+
+        save_to_db("CustomerOrder", order_values)
+
+        order_id = get_active_customer_order(customer_id)[0]
+
+        # Insert products and get IDs
+        first_product_values = [self.faker.random_int(), self.faker.word(), self.faker.text(), 1, 1]
+
+        first_product_id = save_to_db("Product", first_product_values)
+
+        second_product_values = [self.faker.random_int(), self.faker.word(), self.faker.text(), 1, 1]
+
+        second_product_id = save_to_db("Product", second_product_values)
+
+        save_to_db("ProductOrder", [first_product_id, order_id])
+        save_to_db("ProductOrder", [first_product_id, order_id])
+        save_to_db("ProductOrder", [second_product_id, order_id])
+
+        products_on_order = get_products_on_order(customer_id)
+
+        self.assertIsNotNone(products_on_order)
+
+

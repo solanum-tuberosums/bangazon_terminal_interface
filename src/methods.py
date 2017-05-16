@@ -189,54 +189,28 @@ def save_to_db(table, values):
     """
     This method saves data passed in during the method invocation to a table
     in a database, which is defined during the method invocation.
-
     ---Arguments---
     table(string):      This represents the name of the table to which we save
                         data.
-
     values(list):       This list contains the relevant data passed in through
                         the command-line interface via main.py.
-
     ---Return Value---
     pk(integer):        The primary key of the data inserted into the table
-
     Author: Jeremy Bakker
     """
 
     with sqlite3.connect('db.sqlite3') as conn:
         c = conn.cursor()
-        sql = generate_insert(table, values)
-        if len(sql) == 0:
-            #Do nothing. warn someone!
-            raise ValueError("malformed query")
-        else:
-            c.executemany(sql, values)
-            conn.commit()
-            pk = c.lastrowid
-            return pk
-
-def generate_insert(table, values=[]):
-    
-    if isinstance(values, dict):
-        value_placement = ",".join(["=".join([key, str(value)]) for key, value in values.items()])
-    elif isinstance(values, list):
-        value_placement = ",".join(itertools.repeat('?', len(values)))
-
-    if value_placement is not None:
-        sql = "INSERT INTO {0} VALUES {1}".format(table, value_placement)
-        return sql
-    else:
-        return "exception?"
-
-    # use executemany to make inputs generic
-    # itertools: repeat()
-    #isinstance
-
-    # valuesList = 'NULL'
-    #         for val in values:
-    #             valuesList = valuesList + ', "' + str(val) + '"'
-    #         sql =   ''' INSERT INTO {} VALUES ({})
-    #                 '''.format(table, valuesList)
+        valuesList = 'NULL'
+        for val in values:
+            valuesList = valuesList + ', "' + str(val) + '"'
+        sql =   ''' INSERT INTO {} VALUES ({})
+                '''.format(table, valuesList)
+        c.execute(sql)
+        conn.commit()
+        pk = c.lastrowid
+        return pk
+        
 
 def get_order_total(order_id):
     """
