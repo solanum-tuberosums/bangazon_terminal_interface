@@ -298,14 +298,11 @@ def get_user_input(input_type=str()):
     # These are the possible input forms we understand:
     if input_type == 'new_product':
         input_queries = ('price', 'title', 'description', 'product_type')
-        data_types = ('float', 'string', 'string', 'int')
 
     elif input_type == 'new_customer':
         input_queries = ('first_name', 'middle_name', 'last_name',
                          'street_address', 'city', 'state', 'postal_code',
                          'phone_number')
-        data_types = ('string', 'string', 'string', 'string', 'string',
-                      'string', 'int', 'int')
 
     elif input_type == 'payment_type':
         input_queries = ('account_label', 'account_type', 'account_number')

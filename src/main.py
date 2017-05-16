@@ -319,6 +319,7 @@ def run_ordering_system(menu_command=None):
         ###
 
         elif menu_command == 7:
+
             if active_customer_id:
                 try:
                     active_order = get_active_customer_order(active_customer_id)
@@ -330,9 +331,11 @@ def run_ordering_system(menu_command=None):
                     print('{:*<57}'.format('*'))
                     input('Press Enter to continue')
                     menu_command = None
+
                 except TypeError:
                     print('CUSTOMER HAS NO ACTIVE ORDERS. ADD PRODUCTS TO AN ORDER FIRST.')
                     menu_command = None
+
             else:
                 print('PLEASE SELECT ACTIVE CUSTOMER')
                 input('Press Enter to continue')
@@ -348,14 +351,10 @@ def run_ordering_system(menu_command=None):
                 new_product = get_user_input('new_product')
                 new_product.append(active_customer_id)
     
-                try:
-                    float(new_product[0])
                     save_to_db('Product', new_product)
                     print('New product saved')
                     menu_command = None
-                except ValueError:
-                    print('Price must be a number')
-                    menu_command = 8
+
             else:
                 print('PLEASE SELECT ACTIVE CUSTOMER')
                 input('Press Enter to continue')
