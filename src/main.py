@@ -29,7 +29,7 @@ def run_ordering_system(menu_command=None):
 
     active_customer_id = None
 
-    while menu_command != 7:
+    while menu_command != 8:
         total_revenue = float()
         total_orders = int()
         total_customers = int()
@@ -43,7 +43,8 @@ def run_ordering_system(menu_command=None):
             print("4. Add product to shopping cart")
             print("5. Complete an order")
             print("6. See product popularity")
-            print("7. Leave Bangazon!")
+            print("7. View active customer order")
+            print("8. Leave Bangazon!")
             try:
                 menu_command = int(input
                     ('Please select the number that corresponds to your menu '
@@ -315,10 +316,37 @@ def run_ordering_system(menu_command=None):
                 input("Nothing has been purchased yet, there's no contest, "
                     'broseph.\nPress enter to return to the main menu\n')
                 menu_command = None
+        elif menu_command == 7:
+            # Check active_customer and get current order
+            if active_customer_id:
+                try:
+                    order_tuple = get_active_customer_order(active_customer_id)
+                    order_id = order_tuple[0]
+                except TypeError:
+                    order_values = [None, datetime.datetime.now(),
+                                    active_customer_id, None]
+                    order_id = save_to_db("CustomerOrder", order_values)
+                # Return tuple with active customer's open order info
+                open_order = get_products_on_order(active_customer_id)
+                print("\n *** CURRENT ORDER: ***\n")
+                for counter, product in enumerate(open_order):
+                    # total_cost = sum(product[1])
+                    print(str(counter+1)+". ", product[0]+ " @"+"$"+str(product[1]))
+                   
+                    # print("Total Cost: "+"$"+total_cost)
+                menu_command = None
+            else:
+                print('\n --- PLEASE SELECT AN ACTIVE CUSTOMER OR CREATE A '
+                    'NEW CUSTOMER \n --- Press any key to return to main menu.'
+                    '\n')
+                input()
+                menu_command = None
+                   
+
         else:
             print('\n --- MUST ENTER A VALID MENU OPTION ---\n')
             menu_command = None
-    if menu_command == 7:
+    if menu_command == 8:
         print("Cya, Sucka! Thanks for visiting Bangazon.")
 if __name__ == "__main__":
     if os.path.isfile('db.sqlite3'):

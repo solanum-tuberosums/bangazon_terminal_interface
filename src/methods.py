@@ -87,6 +87,40 @@ def complete_order(order_id, pmt_type_id):
         conn.commit()
 
 
+def get_products_on_order(customer_id):
+    """
+    This method returns a list of products on active_customer's current order.
+
+    ---Arguments---
+    customer_id(integer):   This argument represents the id of the customer
+                            whose order data we want to pull from the database.
+
+    ---Return Value---
+    selection(tuple):       A tuple that contains all the data for the queried
+                            order
+
+    Author: Jessica Younker
+    """
+    with sqlite3.connect('db.sqlite3') as conn:
+        c = conn.cursor()
+        sql =   ''' SELECT p.title, p.price, p.id as product_id, 
+                    co.id AS CustomerOrderID, c.id as customer_id
+                    FROM Customer c
+                    INNER JOIN CustomerOrder co ON c.id = co.customer_id 
+                    AND co.date_paid = "None"
+                    INNER JOIN ProductOrder po ON po.order_id = co.id 
+                    INNER JOIN Product p ON po.product_id = p.id
+                    WHERE c.id = {}
+                    ORDER BY customer_id
+                '''.format(customer_id)
+        selection = [row for row in c.execute(sql)]
+        conn.commit()
+
+        if len(selection) == 0:
+            return None
+        else:
+            return selection
+
 def get_active_customer_order(customer_id):
     """
     This method returns the most recently created order for a customer.
