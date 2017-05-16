@@ -298,11 +298,14 @@ def get_user_input(input_type=str()):
     # These are the possible input forms we understand:
     if input_type == 'new_product':
         input_queries = ('price', 'title', 'description', 'product_type')
+        data_types = ('float', 'string', 'string', 'int')
 
     elif input_type == 'new_customer':
         input_queries = ('first_name', 'middle_name', 'last_name',
                          'street_address', 'city', 'state', 'postal_code',
                          'phone_number')
+        data_types = ('string', 'string', 'string', 'string', 'string',
+                      'string', 'int', 'int')
 
     elif input_type == 'payment_type':
         input_queries = ('account_label', 'account_type', 'account_number')
@@ -311,20 +314,41 @@ def get_user_input(input_type=str()):
     else:
         return None
 
-    for field in input_queries:
-        # new products have a foreign key of product_type which a user
-        # must select from a list. We account for that edge case here:
+    for i, field in enumerate(input_queries):
+        # new products are required to have a valid foreign key of product_type
+        # which a user must select from a list. We account for that edge case 
+        # here:
         if field == 'product_type':
             product_types_list = get_all_from_table('ProductType')
             for index, item in enumerate(product_types_list):
                 print('{}. {}'.format(index + 1, item[1]))
-            new_values.append(input('What is the {}?'.format(field.replace('_', ' '))))
+            product_type = None
+            while product_type == None or product_type < 1 or product_type > len(product_types_list):
+                try:
+                    product_type = int(input('What is the {}?'.format(field.replace('_', ' '))))
+                    new_values.append(product_types_list[product_type -1][0])
+                except ValueError:
+                    print('Please select the number of a product type')
+                except IndexError:
+                    print('Please enter a number of a displayed product type')
             break
 
         # otherwise, carry on.
         new_values.append(input('What is the {}?'.format(field.replace('_', ' '))))
 
     return new_values
+
+def validate_input(data_type, data_value):
+    '''
+       This method exists to create a simple, reusable interface for validating 
+       data types. 
+
+       ---Arguments---
+       data_type
+    '''
+    pass
+
+
 
 def build_db():
     """
