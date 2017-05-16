@@ -52,11 +52,12 @@ def get_all_from_table(table_name, customer_id=None):
             elif table_name.lower() == 'product':
                 ordering = 'id'
             elif table_name.lower() == 'producttype':
-                sql =   ''' SELECT * FROM {} ORDER BY {}
-                        '''.format(table_name, ordering)
-                selection = [row for row in c.execute(sql)]
-                conn.commit()
-                return selection
+                ordering = 'id'
+            sql =   ''' SELECT * FROM {} ORDER BY {}
+                    '''.format(table_name, ordering)
+            selection = [row for row in c.execute(sql)]
+            conn.commit()
+            return selection
 
 
 def complete_order(order_id, pmt_type_id):
@@ -204,16 +205,38 @@ def save_to_db(table, values):
 
     with sqlite3.connect('db.sqlite3') as conn:
         c = conn.cursor()
-        valuesList = 'NULL'
-        for val in values:
-            valuesList = valuesList + ', "' + str(val) + '"'
-        sql =   ''' INSERT INTO {} VALUES ({})
-                '''.format(table, valuesList)
-        c.execute(sql)
-        conn.commit()
-        pk = c.lastrowid
-        return pk
+        sql = generate_insert(table, values)
+        if len(sql) == 0:
+            #Do nothing. warn someone!
+            raise ValueError("malformed query")
+        else:
+            c.executemany(sql, values)
+            conn.commit()
+            pk = c.lastrowid
+            return pk
 
+def generate_insert(table, values=[]):
+    
+    if isinstance(values, dict):
+        value_placement = ",".join(["=".join([key, str(value)]) for key, value in values.items()])
+    elif isinstance(values, list):
+        value_placement = ",".join(itertools.repeat('?', len(values)))
+
+    if value_placement is not None:
+        sql = "INSERT INTO {0} VALUES {1}".format(table, value_placement)
+        return sql
+    else:
+        return "exception?"
+
+    # use executemany to make inputs generic
+    # itertools: repeat()
+    #isinstance
+
+    # valuesList = 'NULL'
+    #         for val in values:
+    #             valuesList = valuesList + ', "' + str(val) + '"'
+    #         sql =   ''' INSERT INTO {} VALUES ({})
+    #                 '''.format(table, valuesList)
 
 def get_order_total(order_id):
     """

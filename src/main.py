@@ -356,12 +356,38 @@ def run_ordering_system(menu_command=None):
                     print("Enter product description")
                     product_description = input(' > ')
                     
+                    print("Select from list of product types: ")
                     product_type_choices = get_all_from_table("ProductType")
+                    # Add final menu option to add a new product type
+                    add_product_type_option = (9999, " *** ADD NEW PRODUCT TYPE ***")
+                    product_type_choices.append(add_product_type_option)
+                    # Display product types
                     for counter, product_type in enumerate(product_type_choices):
-                        print(str(counter+1)+". ", product_type[1])
-                    print("Select from existing product types or press enter to add new")
-                                    
-                    product_type = input(' > ')
+                        print(str(counter+1)+". ", product_type[1]) 
+                    # User can select existing product type (ok to use pt.id?)
+                    try:
+                        product_type_id = int(input(' > '))
+                    except:
+                        product_type_id = 0
+                    if product_type_id <= 0:
+                        print('\n --- PRODUCT TYPE DOES NOT EXIST ---\n')
+                    # User can add a new product type
+                    else:
+                        if len(product_type_choices) == product_type_id:
+                            new_product_type_label = input("Enter a new Product Type for your product")
+                            save_to_db("ProductType", (new_product_type_id, new_product_type_label))
+                            menu_command = None
+                        # # Add product type to product entry
+                        # else:
+                        #     try:
+                        #         product_type_id = product_type_choices[
+                        #             product_type_id-1][0]
+
+                        #         print("\n *** PRODUCT ADDED ***\n")
+                        #         menu_command = None
+                        #     except:
+                        #         print("\n --- PRODUCT TYPE DOES NOT EXIST ---\n")
+                        #         menu_command = None             
                     #or choose from a list of existing product types
                     product_values = []
                     product_values.extend([product_price, product_title, 
