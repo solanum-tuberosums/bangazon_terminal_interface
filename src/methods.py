@@ -242,6 +242,16 @@ def get_popular_products():
         return c.fetchall()
 
 
+def get_order_details(order_id):
+    with sqlite3.connect('db.sqlite3') as conn:
+        c = conn.cursor()
+        sql =   ''' SELECT * FROM ProductOrder po, Product p
+                        WHERE po.product_id = p.id
+                        AND po.order_id = {}
+                '''.format(str(order_id))
+        c.execute(sql)
+        return c.fetchall()
+
 def build_db():
     """
     This method will build the db.sqlite3 file
