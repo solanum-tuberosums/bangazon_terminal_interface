@@ -351,9 +351,9 @@ def run_ordering_system(menu_command=None):
                 new_product = get_user_input('new_product')
                 new_product.append(active_customer_id)
     
-                    save_to_db('Product', new_product)
-                    print('New product saved')
-                    menu_command = None
+                save_to_db('Product', new_product)
+                print('New product saved')
+                menu_command = None
 
             else:
                 print('PLEASE SELECT ACTIVE CUSTOMER')
