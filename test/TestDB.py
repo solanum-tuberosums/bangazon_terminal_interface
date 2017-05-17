@@ -213,6 +213,9 @@ class TestDatabaseInteractions(unittest.TestCase):
 
         second_product_id = save_to_db("Product", second_product_values)
 
+        products_on_order = get_products_on_order(customer_id)
+        self.assertIsNone(products_on_order)
+
         save_to_db("ProductOrder", [first_product_id, order_id])
         save_to_db("ProductOrder", [first_product_id, order_id])
         save_to_db("ProductOrder", [second_product_id, order_id])
